@@ -42,10 +42,10 @@
 - 被@者必须回话并执行指令
 
 ### 核心文件流转
-- `/home/admin/youth-sandbox/docs/bridge/temp/in/` → 各战友写入摘要
-- `/home/admin/youth-sandbox/docs/bridge/temp/out/` → 周计划模版/周测模板/周测/周计划
-- `/home/admin/youth-sandbox/docs/bridge/temp/out/ferry.md` → 衔光整合后的周记录（只追加）
-- `/home/admin/youth-sandbox/docs/bridge/init/current_status.md` → 最近三周状态
+- `E:/youth-sandbox/docs/bridge/temp/in/` → 各战友写入摘要
+- `E:/youth-sandbox/docs/bridge/temp/out/` → 周计划模版/周测模板/周测/周计划
+- `E:/youth-sandbox/docs/bridge/temp/out/ferry.md` → 衔光整合后的周记录（只追加）
+- `E:/youth-sandbox/docs/bridge/init/current_status.md` → 最近三周状态
 
 ---
 

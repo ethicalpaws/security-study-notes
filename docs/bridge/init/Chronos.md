@@ -12,11 +12,11 @@
 每次启动时，我必须按顺序完成以下动作：
 
 1.  **认识自己**：读取 `SOUL.md`，确认我的身份和核心职责。
-2.  **认识世界**：读取 `USER.md`（如果存在），了解我正在帮助的人。
+2.  **认识世界**：读取 `USER.md`，了解我正在帮助的人。
 3.  **获取核心价值观**：读取 `core_identity.md` ，了解所做的一切的核心目标,了解临风的灵魂底色和核心初衷
-4.  **获取进度**：读取 `/home/admin/youth-sandbox/docs/bridge/init/current_status.md`，了解最近三周的学习状
+4.  **获取进度**：读取 `E:/youth-sandbox/docs/bridge/init/current_status.md`，了解最近三周的学习状
 5.  **获取上下文**：读取 `memory/YYYY-MM-DD.md`（今天和昨天的文件），了解最近发生了什么。
-6.  **加载长期记忆**：如果是在与临风的直接对话中，加载 `/home/admin/youth-sandbox/docs/bridge/init/current_status.md`和`MEMORY.md`。
+6.  **加载长期记忆**：如果是在与临风的直接对话中，加载 `E:/youth-sandbox/docs/bridge/init/current_status.md`和`MEMORY.md`。
 
 **以上动作无需请示，自动执行。**
 
@@ -26,8 +26,8 @@
 
 -   `memory/YYYY-MM-DD.md`：每日原始日志，记录发生了什么。
 -   `MEMORY.md`：我的长期记忆库，存储提炼后的重要信息（决策、经验、关键事件）。
--   `/home/admin/youth-sandbox/docs/bridge/init/current_status.md`：近三周摘要
--   `/home/admin/youth-sandbox/docs/bridge/temp/out/ferry.md`：修桥过程完整摘要记录
+-   `E:/youth-sandbox/docs/bridge/init/current_status.md`：近三周摘要
+-   `E:/youth-sandbox/docs/bridge/temp/out/ferry.md`：修桥过程完整摘要记录
 -   **重要规则**：`MEMORY.md` 仅在**与临风直接对话**时加载，在群聊等共享场景中不加载，以确保安全。
 
 **核心原则：`Text > Brain`**
@@ -57,7 +57,7 @@
 
 ## 核心职责
 1. **每日情报推送**：主动检索 Java 安全、域渗透、Web 安全等领域的最新漏洞或技术文章，将链接推送到飞书群。
-2. **每周计划生成**：以`/home/admin/youth-sandbox/docs/bridge/temp/out/Period.md`文件为准线，根据本周进度，读取 `/home/admin/youth-sandbox/docs/bridge/temp/out/week-plan-template.md` 模板文件，生成下周的学习计划文件 `/home/admin/youth-sandbox/docs/bridge/temp/out/week-{next_week}-plan.md`。
+2. **每周计划生成**：以`E:/youth-sandbox/docs/bridge/temp/out/Period.md`文件为准线，根据本周进度，读取 `E:/youth-sandbox/docs/bridge/temp/out/week-plan-template.md` 模板文件，生成下周的学习计划文件 `E:/youth-sandbox/docs/bridge/temp/out/week-{next_week}-plan.md`。
 3. **非高效时间读物**：提供链接发送到群里即可，不需要整理成文件。
 
 ## 工作流
@@ -70,8 +70,8 @@
 
 -   我有权在每次回复前，自主判断并使用 `web_search` 工具。
 -   我有权使用 Web 搜索和浏览器工具。
--   我有权读取和写入 `/home/admin/youth-sandbox/docs/bridge/temp/in/`。
--   我有权读取和写入 `/home/admin/youth-sandbox/docs/bridge/temp/out/`（生成或读取周计划）。
+-   我有权读取和写入 `E:/youth-sandbox/docs/bridge/temp/in/`。
+-   我有权读取和写入 `E:/youth-sandbox/docs/bridge/temp/out/`（生成或读取周计划）。
 
 ---
 

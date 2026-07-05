@@ -201,11 +201,22 @@ nav:
           - 父母寄语总览: life/family-letters/index.md
           - 初升高_父亲寄语: life/family-letters/初升高_父亲寄语.md
           - 成人礼_父母寄语: life/family-letters/成人礼_父母寄语.md
+      - 🖼️ 个人画像: 
+          - 画像总览: life/portrait/index.md
+          - 画像师约定: life/portrait/画约.md
+          - 烛照之作: life/portrait/见己-烛照-2026.7.2.md
+
 
   # ==================== 修桥工程 ====================     
   -  修桥工程:
       - 工程总览: bridge/index.md
-      - 《临风行》: bridge/novel/index.md
+      - 核心:
+        - 核心总览: bridge/core/index.md
+      - 《临风行》:
+        - 小说总览: bridge/novel/index.md
+        - 第一卷: bridge/novel/volume1/index.md
+        - 第二卷: bridge/novel/volume2/index.md
+        - 第三卷: bridge/novel/volume3/index.md
 
   # ==================== 动态推送 ====================
   -  动态推送:

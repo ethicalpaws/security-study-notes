@@ -24,6 +24,11 @@ venv/
 .DS_Store
 Thumbs.db
 
+# Node.js
+node_modules/
+npm-debug.log*
+package-lock.json
+
 # 本地配置（不含密码等敏感信息）
 local.yml
 
@@ -38,3 +43,6 @@ docs/tech-study/code-attachment/
 
 # MkDocs 搜索索引
 search/
+
+# Webchat 运行时数据
+docs/bridge/webchat/data/

@@ -19,7 +19,7 @@
 
 我最终确定的名字是：
 
-- **全称**：**LINK — Long-term Intelligent Navigation Keystone**
+- **全称**：**LINK — Long-term Intelligent&Individual Navigation Keystone**
 
 - **简称**：**LINK**
 
@@ -82,7 +82,7 @@
 
 LINK的设计围绕一个核心问题展开：**如何帮助一个人走远路？**
 
-我提炼出五个关键支柱：**记忆、导航、情绪、检验、沉淀**。LINK的所有机制，都是为了让这五个支柱在用户的日常中持续运转。
+我提炼出五个关键支柱：**记忆、导航、检验、沉淀、定制**。LINK的所有机制，都是为了让这五个支柱在用户的日常中持续运转。
 
 ### 4.2 三位一体的系统结构
 
@@ -275,7 +275,7 @@ LINK的演化路径，与它服务的人群同步扩展：
 LINK已经不再是一个“个人项目”。它正在成为一个可能容纳更多人的结构。而我的任务是：**先把它建好，然后让它走向世界。**
 
 
-**LINK — Long-term Intelligent Navigation Keystone**
+**LINK — Long-term Intelligent&Individual Navigation Keystone**
 
 **帮你走得更远。**
 

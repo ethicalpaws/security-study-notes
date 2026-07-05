@@ -20,4 +20,4 @@
 
 [回到小说目录](../index.md)
 
-[下一卷](../第二卷·启程/index.md)
+[下一卷](../volume2/index.md)

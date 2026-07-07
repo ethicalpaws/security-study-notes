@@ -2,12 +2,12 @@
 module_name: java-deserialization
 description: Java反序列化漏洞学习笔记
 status: ♻️
-total_notes: 9
-completed: 9
+total_notes: 10
+completed: 10
 in_progress: 0
 not_started: 0
 completion_rate: 100
-last_updated: 2026-06-29 00:07:24
+last_updated: 2026-07-08 03:36:58
 ---
 
 # ☕ java-deserialization
@@ -20,8 +20,8 @@ last_updated: 2026-06-29 00:07:24
 
 | 指标 | 数值 |
 |------|:----:|
-| 总笔记数 | 9 |
-| ✅ 已完成 | 9 |
+| 总笔记数 | 10 |
+| ✅ 已完成 | 10 |
 | 🔄 进行中 | 0 |
 | ⬜ 未开始 | 0 |
 | 完成率 | ██████████ 100% |
@@ -38,6 +38,7 @@ last_updated: 2026-06-29 00:07:24
 | [CC7链分析](CC7.md) | CC7 | ✅ |
 | [CC5链分析](CC5.md) | CC5 | ✅ |
 | [CC6链分析](CC6.md) | CC6 | ✅ |
+| [不同Gadget库对比](Gadget-Compare.md) | Gadget-Compare | ✅ |
 | [CC1链分析](CC1.md) | CC1 | ✅ |
 
 ## 🔗 关联实战
@@ -60,4 +61,4 @@ last_updated: 2026-06-29 00:07:24
 | [WebLogic CVE-2017-10271](../../../practice/cve\WebLogic-CVE-2017-10271) | WebLogic XMLDecoder反序列化漏洞，可远程代码执行 |
 
 ---
-*自动更新：2026-06-29 00:07:24
+*自动更新：2026-07-08 03:36:58

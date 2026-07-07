@@ -1,6 +1,6 @@
 ---
-total_weeks: 5
-last_updated: 2026-06-29 00:12:17
+total_weeks: 6
+last_updated: 2026-07-08 03:37:17
 ---
 # 📖 每周计划
 
@@ -13,7 +13,8 @@ last_updated: 2026-06-29 00:12:17
 - [第3周](week3.md) - 完成CC2/3/4链学习，初步了解SSTI和信息泄露，...
 - [第4周](week4.md) - 从零掌握JNDI + Log4Shell完整复现 + ...
 - [第5周](week5.md) - 启航 · Java安全（FastJSON + 内存马入门）
+- [第6周](week6.md) - Java安全深化（内存马高阶 + JNDI + Spr...
 
 ---
 
-*最后更新：2026-06-29 00:12:17*
+*最后更新：2026-07-08 03:37:17*

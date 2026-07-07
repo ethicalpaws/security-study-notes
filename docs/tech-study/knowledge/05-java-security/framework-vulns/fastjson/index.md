@@ -1,36 +1,40 @@
 ---
 module_name: fastjson
 description: fastjson 框架漏洞学习笔记
-status: ⬜
-total_notes: 1
-completed: 0
+status: 🔄
+total_notes: 5
+completed: 4
 in_progress: 0
 not_started: 1
-completion_rate: 0
-last_updated: 2026-06-29 00:07:26
+completion_rate: 80
+last_updated: 2026-07-08 03:37:02
 ---
 
 # fastjson
 
 > fastjson 框架漏洞学习笔记
 
-## 模块状态：⬜
+## 模块状态：🔄
 
 ## 📊 学习统计
 
 | 指标 | 数值 |
 |------|:----:|
-| 总笔记数 | 1 |
-| ✅ 已完成 | 0 |
+| 总笔记数 | 5 |
+| ✅ 已完成 | 4 |
 | 🔄 进行中 | 0 |
 | ⬜ 未开始 | 1 |
-| 完成率 | ░░░░░░░░░░ 0% |
+| 完成率 | ████████░░ 80% |
 
 ## 📖 学习内容
 
 | 笔记 | 描述 | 状态 |
 |------|------|:----:|
-| [fastjson](fastjson.md) |  | ⬜ |
+| [Fastjson 1.2.68 反序列化漏洞分析](1.2.68.md) | Fastjson 1.2.68 版本绕过 checkAutoType() 机制的原理分析，包括 sa... | ✅ |
+| [Fastjson 1.2.83 反序列化漏洞分析](1.2.83.md) | Fastjson 1.2.83 版本利用 Throwable 异常类特殊处理绕过 AutoType ... | ✅ |
+| [Fastjson 三个重要版本对比](compare.md) | Fastjson 1.2.24、1.2.47、1.2.68、1.2.83 四个版本的核心机制、绕过对... | ✅ |
+| [Fastjson 1.2.47 反序列化漏洞分析](1.2.47.md) | Fastjson 1.2.47 版本绕过 checkAutoType() 机制的原理分析，包括源码级... | ✅ |
+| [basic](basic.md) |  | ⬜ |
 
 ---
-*自动更新：2026-06-29 00:07:26
+*自动更新：2026-07-08 03:37:02

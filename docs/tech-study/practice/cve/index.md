@@ -1,10 +1,10 @@
 ---
-total_cves: 5
+total_cves: 6
 analyzed: 4
 in_progress: 0
-not_started: 1
-completion_rate: 80
-last_updated: 2026-06-29 00:07:31
+not_started: 2
+completion_rate: 66
+last_updated: 2026-07-08 03:37:08
 ---
 
 # 🐞 CVE 漏洞分析
@@ -15,11 +15,11 @@ last_updated: 2026-06-29 00:07:31
 
 | 指标 | 数值 |
 |------|:----:|
-| CVE总数 | 5 |
+| CVE总数 | 6 |
 | ✅ 已分析 | 4 |
 | 🔄 分析中 | 0 |
-| ⬜ 未开始 | 1 |
-| 完成率 | ████████░░ 80% |
+| ⬜ 未开始 | 2 |
+| 完成率 | ██████░░░░ 66% |
 
 ## 📋 漏洞列表
 
@@ -29,13 +29,14 @@ last_updated: 2026-06-29 00:07:31
 | CVE-2016-4437 | Shiro反序列化漏洞，AES硬编码密钥导致RCE | 高危 | 中等 | ✅ |
 | WebLogic-CVE-2017-10271 | WebLogic XMLDecoder反序列化漏洞，可远程代码执行 | 中危 | 中等 | ✅ |
 | CVE-2021-2109 | WebLogic JNDI注入漏洞，可远程代码执行 | 高危 | 困难 | ✅ |
+| Fastjson-CVE-2017-18349 | None | 中危 | None | ⬜ |
 | WebLogic-CVE-2023-21839 | None | 中危 | None | ⬜ |
 
 ## 🔥 漏洞类型分布
 
 | 漏洞类型 | 数量 | 占比 |
 |---------|:----:|:----:|
-| 其他 | 5 | 100% |
+| 其他 | 6 | 100% |
 
 ## 💡 学习建议
 
@@ -58,6 +59,7 @@ last_updated: 2026-06-29 00:07:31
 | CVE-2016-4437 | [Shiro550-CVE-2016-4437/](Shiro550-CVE-2016-4437/) |
 | WebLogic-CVE-2017-10271 | [WebLogic-CVE-2017-10271/](WebLogic-CVE-2017-10271/) |
 | CVE-2021-2109 | [WebLogic-CVE-2021-2109/](WebLogic-CVE-2021-2109/) |
+| Fastjson-CVE-2017-18349 | [Fastjson-CVE-2017-18349/](Fastjson-CVE-2017-18349/) |
 | WebLogic-CVE-2023-21839 | [WebLogic-CVE-2023-21839/](WebLogic-CVE-2023-21839/) |
 
 ## 📝 近期更新
@@ -65,4 +67,4 @@ last_updated: 2026-06-29 00:07:31
 - 暂无更新记录
 
 ---
-*最后更新：2026-06-29 00:07:31 | 持续学习，深度思考 💪*
+*最后更新：2026-07-08 03:37:08 | 持续学习，深度思考 💪*

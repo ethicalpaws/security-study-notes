@@ -1,11 +1,11 @@
 ---
 total_modules: 4
-total_notes: 15
-completed: 13
+total_notes: 20
+completed: 18
 in_progress: 0
 not_started: 2
-completion_rate: 86
-last_updated: 2026-06-29 00:07:27
+completion_rate: 90
+last_updated: 2026-07-08 03:37:03
 ---
 
 # ☕ Java安全
@@ -18,8 +18,8 @@ last_updated: 2026-06-29 00:07:27
 
 | 模块 | 笔记数 | 已完成 | 完成率 | 状态 |
 |------|:------:|:------:|:------:|:----:|
-| [Framework Vulns](framework-vulns/) | 3 | 2 | 66% | ⬜ |
-| [Java Deserialization](java-deserialization/) | 9 | 9 | 100% | ♻️ |
+| [Framework Vulns](framework-vulns/) | 7 | 6 | 85% | ⬜ |
+| [Java Deserialization](java-deserialization/) | 10 | 10 | 100% | ♻️ |
 | [Jndi Injection](jndi-injection/) | 2 | 2 | 100% | ♻️ |
 | [Memory Shell](memory-shell/) | 1 | 0 | 0% | ⬜ |
 
@@ -28,11 +28,11 @@ last_updated: 2026-06-29 00:07:27
 | 指标 | 数值 |
 |------|:----:|
 | 总模块数 | 4 |
-| 总笔记数 | 15 |
-| ✅ 已完成笔记 | 13 |
+| 总笔记数 | 20 |
+| ✅ 已完成笔记 | 18 |
 | 🔄 进行中 | 0 |
 | ⬜ 未开始 | 2 |
-| 整体完成率 | ████████░░ 86% |
+| 整体完成率 | █████████░ 90% |
 
 ## 🎯 学习路线（建议顺序）
 
@@ -61,4 +61,4 @@ last_updated: 2026-06-29 00:07:27
 - [ ] 完成 10 个模块 → 🏆 Java安全精通
 
 ---
-*最后更新：2026-06-29 00:07:27 | 状态自动同步*
+*最后更新：2026-07-08 03:37:03 | 状态自动同步*

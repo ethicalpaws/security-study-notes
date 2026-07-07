@@ -5,7 +5,7 @@ status: ⬜
 finish_date: None
 note_path: sqli.md
 tags: ['sqli', 'sql-injection', '数据库注入']
-last_updated: 2026-06-29 00:07:23
+last_updated: 2026-07-08 03:36:55
 ---
 
 # SQL注入漏洞 - 笔记概述
@@ -45,4 +45,4 @@ last_updated: 2026-06-29 00:07:23
 暂无
 
 ---
-*自动更新：2026-06-29 00:07:23
+*自动更新：2026-07-08 03:36:55

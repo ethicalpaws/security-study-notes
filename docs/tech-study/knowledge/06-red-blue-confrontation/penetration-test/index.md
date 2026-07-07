@@ -7,7 +7,7 @@ completed: 0
 in_progress: 0
 not_started: 1
 completion_rate: 0
-last_updated: 2026-06-29 00:07:27
+last_updated: 2026-07-08 03:37:03
 ---
 
 # penetration-test
@@ -33,4 +33,4 @@ last_updated: 2026-06-29 00:07:27
 | [penetration-test](penetration-test.md) |  | ⬜ |
 
 ---
-*自动更新：2026-06-29 00:07:27
+*自动更新：2026-07-08 03:37:03

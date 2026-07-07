@@ -5,7 +5,7 @@ status: ✅
 finish_date: 2026-05-22
 note_path: command_injection.md
 tags: ['command-injection', 'rce', 'shell-injection']
-last_updated: 2026-06-29 00:07:23
+last_updated: 2026-07-08 03:36:55
 ---
 
 # 命令注入漏洞 - 笔记概述
@@ -44,4 +44,4 @@ last_updated: 2026-06-29 00:07:23
 暂无
 
 ---
-*自动更新：2026-06-29 00:07:23
+*自动更新：2026-07-08 03:36:55

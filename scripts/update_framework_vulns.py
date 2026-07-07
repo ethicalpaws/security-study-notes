@@ -8,6 +8,7 @@ framework-vulns 模块 index.md 自动生成脚本
 
 import os
 import sys
+from datetime import datetime
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, SCRIPT_DIR)
@@ -97,6 +98,16 @@ last_updated: {last_updated}
 *自动更新：{update_time}
 '''
 
+def normalize_date(value):
+    """将日期值统一转换为字符串，用于排序和显示"""
+    if value is None:
+        return ''
+    if isinstance(value, datetime):
+        return value.strftime('%Y-%m-%d')
+    if isinstance(value, str):
+        return value
+    return str(value)
+
 def collect_notes_recursive(module_dir: str) -> list:
     """递归收集模块目录下所有笔记的元数据"""
     notes_data = []
@@ -116,6 +127,9 @@ def collect_notes_recursive(module_dir: str) -> list:
             status_cn = metadata.get('status', '未开始')
             finish_date = metadata.get('finish-date', '')
             
+            # 统一转换日期为字符串
+            finish_date_str = normalize_date(finish_date)
+            
             rel_path = os.path.relpath(note_path, module_dir)
             
             notes_data.append({
@@ -123,7 +137,7 @@ def collect_notes_recursive(module_dir: str) -> list:
                 'title': title,
                 'description': description,
                 'status_cn': status_cn,
-                'finish_date': finish_date
+                'finish_date': finish_date_str  # 存储字符串格式
             })
     
     return notes_data
@@ -152,7 +166,7 @@ def update_sub_module(module_dir: str, module_name: str, dry_run: bool = False) 
     else:
         module_status = "⬜"
     
-    # 生成笔记表格（按完成日期倒序）
+    # 生成笔记表格（按完成日期倒序，字符串排序安全）
     notes_data.sort(key=lambda x: x.get('finish_date', ''), reverse=True)
     
     notes_table_lines = []

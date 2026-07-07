@@ -9,11 +9,11 @@
   },
   "auto": {
     "level": 5,
-    "current_exp": 52,
+    "current_exp": 122,
     "next_exp": 414,
-    "total_exp": 1125,
+    "total_exp": 1195,
     "stats": {
-      "notes_count": 91,
+      "notes_count": 98,
       "ctf_count": 0,
       "cve_count": 4,
       "src_count": 0,
@@ -26,7 +26,7 @@
     "skills": {
       "web_security": 75.0,
       "web_advanced": 0.0,
-      "java_security": 74.0,
+      "java_security": 74.5,
       "ctf_ability": 8.0,
       "cve_analysis": 8.0,
       "src_dig": 0.0,
@@ -98,11 +98,11 @@
           ]
         },
         {
-          "total": 49,
-          "max_daily": 45,
+          "total": 52,
+          "max_daily": 48,
           "days": [
             3,
-            45,
+            48,
             1,
             0,
             0,
@@ -150,14 +150,14 @@
           ]
         },
         {
-          "total": 7,
-          "max_daily": 4,
+          "total": 11,
+          "max_daily": 8,
           "days": [
             0,
             0,
             0,
             3,
-            4,
+            8,
             0,
             0
           ]
@@ -722,11 +722,11 @@
           ]
         }
       ],
-      "total_notes": 91,
+      "total_notes": 98,
       "active_days": 18,
-      "max_contrib": 45
+      "max_contrib": 48
     },
-    "last_update": "2026-07-08 03:37:15",
+    "last_update": "2026-07-08 06:12:36",
     "first_bug_awarded": true,
     "start_date": "2026-05-27"
   }

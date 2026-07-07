@@ -1,0 +1,548 @@
+{
+  "version": 1,
+  "updatedAt": "2026-07-04T14:05:25.505Z",
+  "count": 35,
+  "entries": [
+    {
+      "id": "ctf\\BUUCTF\\index.md",
+      "path": "ctf\\BUUCTF\\index.md",
+      "title": "index",
+      "description": "",
+      "tags": [],
+      "status": "",
+      "difficulty": "",
+      "finishDate": "",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "🏴 CTF 学习记录\r \r > 比赛WriteUp、技巧与工具总结\r \r    📂 板块导航\r \r | 板块 | 内容 |\r |------|------|\r | [miniL靶场](miniL/) | miniL靶场WriteUp |\r \r ---\r \r    📝 待补充\r \r - 更多CTF比赛记录"
+    },
+    {
+      "id": "ctf\\index.md",
+      "path": "ctf\\index.md",
+      "title": "index",
+      "description": "",
+      "tags": [],
+      "status": "",
+      "difficulty": "",
+      "finishDate": "",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "🎯 CTF 训练场\r \r > 各大CTF比赛WriteUp汇总\r \r    📊 整体进度\r \r | 指标 | 数值 |\r |------|:----:|\r | 模块总数 | 2 |\r | 总题目数 | 5 |\r | ✅ 已解决 | 4 |\r | 🔄 进行中 | 0 |\r | ⬜ 未开始 | 1 |\r | 整体完成率 | ████████░░ 80% |\r \r    📚 模块列表\r \r | "
+    },
+    {
+      "id": "ctf\\miniL\\EzDomain\\EzDomain_wp.md",
+      "path": "ctf\\miniL\\EzDomain\\EzDomain_wp.md",
+      "title": "EzDomain",
+      "description": "待补充",
+      "tags": [],
+      "status": "未开始",
+      "difficulty": "中等",
+      "finishDate": "",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": ">\r   EZDomain_wp"
+    },
+    {
+      "id": "ctf\\miniL\\EzDomain\\index.md",
+      "path": "ctf\\miniL\\EzDomain\\index.md",
+      "title": "EzDomain",
+      "description": "待补充",
+      "tags": [],
+      "status": "⬜",
+      "difficulty": "中等",
+      "finishDate": "None",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "🗡️ 狩猎记录 · EzDomain\r \r ---\r \r     ⚔️ 目标档案\r \r | 属性 | 数值 |\r |------|------|\r |  名称  |   EzDomain   |\r |  弱点  | 待补充 |\r |  威胁等级  | ⭐⭐ |\r |  状态  | ⬜   进行中   |\r \r     🏆 战利品\r \r | 奖励 | 数量 |\r |------|------|\r"
+    },
+    {
+      "id": "ctf\\miniL\\Ezff\\Ezff_wp.md",
+      "path": "ctf\\miniL\\Ezff\\Ezff_wp.md",
+      "title": "Ezff",
+      "description": "Fastjson 反序列化漏洞利用",
+      "tags": [
+        "fastjson",
+        "deserialization"
+      ],
+      "status": "已完成",
+      "difficulty": "中等",
+      "finishDate": "2026-05-28T00:00:00.000Z",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "信息收集\r 1. 题目源码，一个简单的java17版本下的fury反序列化，依赖只有fury0.9.0和feilong4.5.1\r       java\r     package com.app;\r \r     import com.feilong.core.net.ParamUtil;\r     import com.feilong.io.InputStreamUtil;\r     import"
+    },
+    {
+      "id": "ctf\\miniL\\Ezff\\index.md",
+      "path": "ctf\\miniL\\Ezff\\index.md",
+      "title": "Ezff",
+      "description": "Fastjson 反序列化漏洞利用",
+      "tags": [
+        "fastjson",
+        "deserialization"
+      ],
+      "status": "✅",
+      "difficulty": "中等",
+      "finishDate": "2026-05-28T00:00:00.000Z",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "🗡️ 狩猎记录 · Ezff\r \r ---\r \r     ⚔️ 目标档案\r \r | 属性 | 数值 |\r |------|------|\r |  名称  |   Ezff   |\r |  弱点  | Fastjson反序列化 |\r |  威胁等级  | ⭐⭐ |\r |  状态  | ✅   已讨伐   |\r \r     🏆 战利品\r \r | 奖励 | 数量 |\r |------|------|"
+    },
+    {
+      "id": "ctf\\miniL\\EzOmniProbe\\EzOmniProbe_wp.md",
+      "path": "ctf\\miniL\\EzOmniProbe\\EzOmniProbe_wp.md",
+      "title": "EzOmniProbe",
+      "description": "竞态条件提权 + vm沙箱逃逸 + setuid/gconv提权",
+      "tags": [
+        "race-condition",
+        "vm",
+        "sandbox-escape",
+        "setuid",
+        "gconv",
+        "privilege-escalation"
+      ],
+      "status": "已完成",
+      "difficulty": "困难",
+      "finishDate": "2026-05-27T00:00:00.000Z",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "信息收集\r 1. ![](EzOmniProbe_wp/2026-05-24-16-06-48.png)\r    可以看到页面显示了几个接口还有当前的身份\r    -  GET /api/me \r    -  GET /api/stats \r    -  POST /api/verify \r    -  POST /api/run \r    -  GET /api/run?cursor=N \r 2"
+    },
+    {
+      "id": "ctf\\miniL\\EzOmniProbe\\index.md",
+      "path": "ctf\\miniL\\EzOmniProbe\\index.md",
+      "title": "EzOmniProbe",
+      "description": "竞态条件提权 + vm沙箱逃逸 + setuid/gconv提权",
+      "tags": [
+        "race-condition",
+        "vm",
+        "sandbox-escape",
+        "setuid",
+        "gconv",
+        "privilege-escalation"
+      ],
+      "status": "✅",
+      "difficulty": "困难",
+      "finishDate": "2026-05-27T00:00:00.000Z",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "🗡️ 狩猎记录 · EzOmniProbe\r \r ---\r \r     ⚔️ 目标档案\r \r | 属性 | 数值 |\r |------|------|\r |  名称  |   EzOmniProbe   |\r |  弱点  | 竞态条件 + 沙箱逃逸 |\r |  威胁等级  | ⭐⭐⭐ |\r |  状态  | ✅   已讨伐   |\r \r     🏆 战利品\r \r | 奖励 | 数量 |\r |"
+    },
+    {
+      "id": "ctf\\miniL\\EzPing\\EzPing_wp.md",
+      "path": "ctf\\miniL\\EzPing\\EzPing_wp.md",
+      "title": "EzPing",
+      "description": "命令注入 + EBCDIC编码绕过WAF",
+      "tags": [
+        "command-injection",
+        "encoding-bypass",
+        "ebcdic",
+        "waf-bypass"
+      ],
+      "status": "已完成",
+      "difficulty": "中等",
+      "finishDate": "2026-05-22T00:00:00.000Z",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "EzPing\r \r > 题目描述：这是一个命令注入题目...\r > 解题思路：首先发现参数存在命令拼接...\r    概括\r 本题的考点演进路径：\r    text\r 命令注入 → WAF 黑名单 → 编码差异 → 客户端控制字符集 → EBCDIC 绕过\r    \r 核心：WAF 与业务代码对同一份数据使用了不同的编码/解码方式\r    信息收集\r 典型的命令注入类型题目，给出了网站源码和相关信"
+    },
+    {
+      "id": "ctf\\miniL\\EzPing\\index.md",
+      "path": "ctf\\miniL\\EzPing\\index.md",
+      "title": "EzPing",
+      "description": "命令注入 + EBCDIC编码绕过WAF",
+      "tags": [
+        "command-injection",
+        "encoding-bypass",
+        "ebcdic",
+        "waf-bypass"
+      ],
+      "status": "✅",
+      "difficulty": "中等",
+      "finishDate": "2026-05-22T00:00:00.000Z",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "🗡️ 狩猎记录 · EzPing\r \r ---\r \r     ⚔️ 目标档案\r \r | 属性 | 数值 |\r |------|------|\r |  名称  |   EzPing   |\r |  弱点  | 命令注入 |\r |  威胁等级  | ⭐⭐ |\r |  状态  | ✅   已讨伐   |\r \r     🏆 战利品\r \r | 奖励 | 数量 |\r |------|------|\r | "
+    },
+    {
+      "id": "ctf\\miniL\\Hdphp\\Hdphp_wp.md",
+      "path": "ctf\\miniL\\Hdphp\\Hdphp_wp.md",
+      "title": "Hdphp",
+      "description": "Nginx临时文件 + /proc/self/fd/ + 路径规范化LFI",
+      "tags": [
+        "lfi",
+        "nginx",
+        "proc",
+        "file-inclusion",
+        "path-normalization"
+      ],
+      "status": "已完成",
+      "difficulty": "困难",
+      "finishDate": "2026-05-26T00:00:00.000Z",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "概括\r 利用 Nginx 的大请求体临时文件机制，结合 /proc/self/fd/ 文件描述符路径和路径规范化技巧，在单个请求中完成本地文件包含，实现远程代码执行\r    信息收集\r 1. 题目信息\r        php\r     <?php\r     if (isset($_GET['f']) && !preg_match('/flag|file|php|data|zip|phar|(pro"
+    },
+    {
+      "id": "ctf\\miniL\\Hdphp\\index.md",
+      "path": "ctf\\miniL\\Hdphp\\index.md",
+      "title": "Hdphp",
+      "description": "Nginx临时文件 + /proc/self/fd/ + 路径规范化LFI",
+      "tags": [
+        "lfi",
+        "nginx",
+        "proc",
+        "file-inclusion",
+        "path-normalization"
+      ],
+      "status": "✅",
+      "difficulty": "困难",
+      "finishDate": "2026-05-26T00:00:00.000Z",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "🗡️ 狩猎记录 · Hdphp\r \r ---\r \r     ⚔️ 目标档案\r \r | 属性 | 数值 |\r |------|------|\r |  名称  |   Hdphp   |\r |  弱点  | 本地文件包含 |\r |  威胁等级  | ⭐⭐⭐ |\r |  状态  | ✅   已讨伐   |\r \r     🏆 战利品\r \r | 奖励 | 数量 |\r |------|------|\r |"
+    },
+    {
+      "id": "ctf\\miniL\\index.md",
+      "path": "ctf\\miniL\\index.md",
+      "title": "index",
+      "description": "",
+      "tags": [],
+      "status": "",
+      "difficulty": "",
+      "finishDate": "",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "🎯 MINIL WriteUp\r \r > miniL靶场解题记录\r \r    📊 学习进度\r \r | 指标 | 数值 |\r |------|:----:|\r | 总题目 | 5 |\r | ✅ 已完成 | 4 |\r | 🔄 进行中 | 0 |\r | ⬜ 未开始 | 1 |\r | 完成率 | ████████░░ 80% |\r \r    📝 题目列表\r \r | 题目 | 难度 | 状态 | W"
+    },
+    {
+      "id": "cve\\Fastjson-CVE-2017-18349\\Fastjson-CVE-2017-18349-1.2.47.md",
+      "path": "cve\\Fastjson-CVE-2017-18349\\Fastjson-CVE-2017-18349-1.2.47.md",
+      "title": "Fastjson-CVE-2017-18349-1.2.47",
+      "description": "",
+      "tags": [],
+      "status": "",
+      "difficulty": "",
+      "finishDate": "",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "Fastjson1.2.47\r    环境搭建\r [搭建方法](../../../arsenal/environment-setup/java-cve-debug.md)\r \r ![](Fastjson-CVE-2017-18349-1.2.47/2026-06-30-22-37-12.png)\r \r    1.2.25补丁修复\r \r   限制了 @type 加载的类必须是白名单中的类  \r \r "
+    },
+    {
+      "id": "cve\\Fastjson-CVE-2017-18349\\Fastjson-CVE-2017-18349.md",
+      "path": "cve\\Fastjson-CVE-2017-18349\\Fastjson-CVE-2017-18349.md",
+      "title": "Fastjson-CVE-2017-18349",
+      "description": "",
+      "tags": [],
+      "status": "",
+      "difficulty": "",
+      "finishDate": "",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "Fastjson1.2.24\r    环境搭建\r \r - vulhub搭建\r \r - 为防止虚拟机网络连接出问题，直接选择物理机中拉取镜像传到虚拟机中\r \r    漏洞原理\r Fastjson允许攻击者通过JSON指定任意类，攻击者指定了一个危险类，这个类在初始化时会发起JNDI请求，去加载攻击者控制的远程恶意代码\r \r \r    漏洞复现\r     环节一\r \r >@type允许指定任意类\r \r"
+    },
+    {
+      "id": "cve\\index.md",
+      "path": "cve\\index.md",
+      "title": "index",
+      "description": "",
+      "tags": [],
+      "status": "",
+      "difficulty": "",
+      "finishDate": "",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "🐞 CVE 漏洞分析\r \r > 真实CVE漏洞复现与分析记录\r \r    📊 学习进度\r \r | 指标 | 数值 |\r |------|:----:|\r | CVE总数 | 5 |\r | ✅ 已分析 | 4 |\r | 🔄 分析中 | 0 |\r | ⬜ 未开始 | 1 |\r | 完成率 | ████████░░ 80% |\r \r    📋 漏洞列表\r \r | CVE编号 | 漏洞描述 | 危"
+    },
+    {
+      "id": "cve\\Log4Shell-CVE-2021-44228\\index.md",
+      "path": "cve\\Log4Shell-CVE-2021-44228\\index.md",
+      "title": "Log4Shell",
+      "description": "Log4j2 JNDI注入漏洞，可远程代码执行",
+      "tags": [
+        "log4j",
+        "jndi-injection",
+        "rce"
+      ],
+      "status": "✅",
+      "difficulty": "中等",
+      "finishDate": "",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "🛡️ 漏洞分析 · Log4Shell\r \r ---\r \r     📋 漏洞档案\r \r | 属性 | 数值 |\r |------|------|\r |  CVE编号  | CVE-2021-44228 |\r |  漏洞类型  | JNDI注入 |\r |  CVSS评分  | 10.0 |\r |  危害等级  | 严重 |\r |  影响版本  | 2.0-beta9 ~ 2.14.1 |\r | "
+    },
+    {
+      "id": "cve\\Log4Shell-CVE-2021-44228\\Log4Shell.md",
+      "path": "cve\\Log4Shell-CVE-2021-44228\\Log4Shell.md",
+      "title": "Log4Shell",
+      "description": "Log4j2 JNDI注入漏洞，可远程代码执行",
+      "tags": [
+        "log4j",
+        "jndi-injection",
+        "rce"
+      ],
+      "status": "已完成",
+      "difficulty": "中等",
+      "finishDate": "2026-06-02T00:00:00.000Z",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": ">Solr 是一个广泛使用的、默认存在 Log4j2 依赖的、容易构造请求的标准靶标\r \r    漏洞原理\r    \r Log4j2 的 JNDI Lookup 功能会递归解析 ${} 包裹的表达式。攻击者可注入 ${jndi:ldap://恶意服务器/恶意类}，触发 JNDI 远程加载，导致 RCE\r    \r    环境搭建\r 1. 靶机\r    使用vulhub快速搭建\r     - 常见问"
+    },
+    {
+      "id": "cve\\Shiro550-CVE-2016-4437\\index.md",
+      "path": "cve\\Shiro550-CVE-2016-4437\\index.md",
+      "title": "Shiro550",
+      "description": "Shiro反序列化漏洞，AES硬编码密钥导致RCE",
+      "tags": [
+        "shiro",
+        "deserialization",
+        "aes",
+        "rce"
+      ],
+      "status": "✅",
+      "difficulty": "中等",
+      "finishDate": "",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "🛡️ 漏洞分析 · Shiro550\r \r ---\r \r     📋 漏洞档案\r \r | 属性 | 数值 |\r |------|------|\r |  CVE编号  | CVE-2016-4437 |\r |  漏洞类型  | 反序列化 |\r |  CVSS评分  | 7.5 |\r |  危害等级  | 高危 |\r |  影响版本  | Apache Shiro 1.2.4 及以下 |\r |  "
+    },
+    {
+      "id": "cve\\Shiro550-CVE-2016-4437\\Shiro550.md",
+      "path": "cve\\Shiro550-CVE-2016-4437\\Shiro550.md",
+      "title": "Shiro550",
+      "description": "Shiro反序列化漏洞，AES硬编码密钥导致RCE",
+      "tags": [
+        "shiro",
+        "deserialization",
+        "aes",
+        "rce"
+      ],
+      "status": "已完成",
+      "difficulty": "中等",
+      "finishDate": "2026-05-29T00:00:00.000Z",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "Shiro550(CVE-2016-4437)\r \r > Apache Shiro 1.2.4 及以下版本存在反序列化漏洞，攻击者可利用硬编码密钥构造恶意序列化数据执行任意命令。\r    漏洞原理\r     本质 \r Shiro 的 \"记住我\"（RememberMe）功能在服务端处理 Cookie 时，会依次执行：Base64解码 → AES解密 → 反序列化。由于 AES 加密密钥被硬编码在框架"
+    },
+    {
+      "id": "cve\\WebLogic-CVE-2017-10271\\index.md",
+      "path": "cve\\WebLogic-CVE-2017-10271\\index.md",
+      "title": "WebLogic CVE-2017-10271",
+      "description": "WebLogic XMLDecoder反序列化漏洞，可远程代码执行",
+      "tags": [
+        "weblogic",
+        "xmldecoder",
+        "deserialization",
+        "rce"
+      ],
+      "status": "✅",
+      "difficulty": "中等",
+      "finishDate": "",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "🛡️ 漏洞分析 · WebLogic CVE-2017-10271\r \r ---\r \r     📋 漏洞档案\r \r | 属性 | 数值 |\r |------|------|\r |  CVE编号  | WebLogic-CVE-2017-10271 |\r |  漏洞类型  | XMLDecoder反序列化 |\r |  CVSS评分  | 待补充 |\r |  危害等级  | 中危 |\r |  影响"
+    },
+    {
+      "id": "cve\\WebLogic-CVE-2017-10271\\WebLogic-CVE-2017-10271.md",
+      "path": "cve\\WebLogic-CVE-2017-10271\\WebLogic-CVE-2017-10271.md",
+      "title": "WebLogic CVE-2017-10271",
+      "description": "WebLogic XMLDecoder反序列化漏洞，可远程代码执行",
+      "tags": [
+        "weblogic",
+        "xmldecoder",
+        "deserialization",
+        "rce"
+      ],
+      "status": "已完成",
+      "difficulty": "中等",
+      "finishDate": "2026-05-30T00:00:00.000Z",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "Weblogic-CVE-2017-10271\r >影响版本:weblogic 版本10.3.6.0.0;12.2.1.1.0;12.2.1.2.0;12.1.3.0.0\r    环境搭建\r 使用Vulhub搭建靶场环境，由于虚拟机网络不稳定问题，我采用物理机拉取镜像到本地，然后用虚拟机从物理机中拉取镜像tar包就可以完美绕开网络不稳定问题\r ![](WebLogic-CVE-2017-10271"
+    },
+    {
+      "id": "cve\\WebLogic-CVE-2021-2109\\index.md",
+      "path": "cve\\WebLogic-CVE-2021-2109\\index.md",
+      "title": "WebLogic CVE-2021-2109",
+      "description": "WebLogic JNDI注入漏洞，可远程代码执行",
+      "tags": [
+        "weblogic",
+        "jndi-injection",
+        "rce"
+      ],
+      "status": "✅",
+      "difficulty": "困难",
+      "finishDate": "",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "🛡️ 漏洞分析 · WebLogic CVE-2021-2109\r \r ---\r \r     📋 漏洞档案\r \r | 属性 | 数值 |\r |------|------|\r |  CVE编号  | CVE-2021-2109 |\r |  漏洞类型  | JNDI注入 |\r |  CVSS评分  | 7.2 |\r |  危害等级  | 高危 |\r |  影响版本  | 10.3.6.0.0, 1"
+    },
+    {
+      "id": "cve\\WebLogic-CVE-2021-2109\\WebLogic-CVE-2021-2109.md",
+      "path": "cve\\WebLogic-CVE-2021-2109\\WebLogic-CVE-2021-2109.md",
+      "title": "WebLogic CVE-2021-2109",
+      "description": "WebLogic JNDI注入漏洞，可远程代码执行",
+      "tags": [
+        "weblogic",
+        "jndi-injection",
+        "rce"
+      ],
+      "status": "已完成",
+      "difficulty": "困难",
+      "finishDate": "2026-06-04T00:00:00.000Z",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "WebLogic Server 远程代码执行漏洞复现\r >问题根源：JndiBindingHandle类的构造函数直接使用了用户输入的字符串作为JNDI查询地址，并且没有进行充分的安全校验\r    漏洞原理\r WebLogic 的 /console/consolejndi.portal 接口可以调用存在 JNDI 注入漏洞的 com.bea.console.handles.JndiBindingH"
+    },
+    {
+      "id": "cve\\WebLogic-CVE-2023-21839\\index.md",
+      "path": "cve\\WebLogic-CVE-2023-21839\\index.md",
+      "title": "WebLogic-CVE-2023-21839",
+      "description": "None",
+      "tags": [],
+      "status": "⬜",
+      "difficulty": "None",
+      "finishDate": "",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "🛡️ 漏洞分析 · WebLogic-CVE-2023-21839\r \r ---\r \r     📋 漏洞档案\r \r | 属性 | 数值 |\r |------|------|\r |  CVE编号  | WebLogic-CVE-2023-21839 |\r |  漏洞类型  | 待补充 |\r |  CVSS评分  | 待补充 |\r |  危害等级  | 中危 |\r |  影响版本  | 待补充 |"
+    },
+    {
+      "id": "cve\\WebLogic-CVE-2023-21839\\WebLogic-CVE-2023-21839.md",
+      "path": "cve\\WebLogic-CVE-2023-21839\\WebLogic-CVE-2023-21839.md",
+      "title": "WebLogic-CVE-2023-21839",
+      "description": "",
+      "tags": [],
+      "status": "",
+      "difficulty": "",
+      "finishDate": "",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "WebLogic Server 远程代码执行漏洞复现\r    漏洞原理：ForeignOpaqueReference 对象的 JNDI 注入。WebLogic 在处理绑定到 JNDI 树上的 ForeignOpaqueReference 对象时，会调用其 getReferent() 方法，进而触发远程 JNDI 查询，导致 JNDI 注入，最终实现远程代码执行。\r    漏洞利用链\r    环境搭"
+    },
+    {
+      "id": "index.md",
+      "path": "index.md",
+      "title": "index",
+      "description": "",
+      "tags": [],
+      "status": "",
+      "difficulty": "",
+      "finishDate": "",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "🎯 实战训练场\r \r > CTF · CVE · Lab · SRC 实战记录汇总\r \r    📊 总览\r \r | 指标 | 数值 | 进度 |\r |------|:----:|:----:|\r | 总题目/目标数 | 1 | 🎯 |\r | ✅ 已完成 | 0 | ░░░░░░░░░░ 0% |\r | 🔄 进行中 | 0 | ⏳ |\r | ⬜ 未开始 | 2 | 📋 |\r | 整体完成率"
+    },
+    {
+      "id": "lab\\format.md",
+      "path": "lab\\format.md",
+      "title": "format",
+      "description": "",
+      "tags": [],
+      "status": "",
+      "difficulty": "",
+      "finishDate": "",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": ""
+    },
+    {
+      "id": "lab\\index.md",
+      "path": "lab\\index.md",
+      "title": "index",
+      "description": "",
+      "tags": [],
+      "status": "",
+      "difficulty": "",
+      "finishDate": "",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "🎯 靶场训练场\r \r > 各大平台靶场渗透记录\r \r    📊 整体进度\r \r | 指标 | 数值 |\r |------|:----:|\r | 模块总数 | 2 |\r | 总靶场数 | 2 |\r | ✅ 已攻略 | 0 |\r | 🔄 攻略中 | 0 |\r | ⬜ 未开始 | 2 |\r | 整体完成率 | ░░░░░░░░░░ 0% |\r \r    📚 模块列表\r \r | 模块 | 靶场数 "
+    },
+    {
+      "id": "lab\\TryMeHack\\index.md",
+      "path": "lab\\TryMeHack\\index.md",
+      "title": "index",
+      "description": "",
+      "tags": [],
+      "status": "",
+      "difficulty": "",
+      "finishDate": "",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "🎯 TryMeHack 靶场集\r \r > TryMeHack 平台靶场渗透记录\r \r    📊 学习进度\r \r | 指标 | 数值 |\r |------|:----:|\r | 总靶场 | 1 |\r | ✅ 已攻略 | 0 |\r | 🔄 攻略中 | 0 |\r | ⬜ 未开始 | 1 |\r | 完成率 | ░░░░░░░░░░ 0% |\r \r    📝 靶场列表\r \r | 靶场 | 难度 | "
+    },
+    {
+      "id": "lab\\Vulnhub\\DC1\\DC1.md",
+      "path": "lab\\Vulnhub\\DC1\\DC1.md",
+      "title": "DC1",
+      "description": "Vulnhub DC-1 靶场渗透",
+      "tags": [
+        "vulnhub",
+        "drupal",
+        "suid"
+      ],
+      "status": "未开始",
+      "difficulty": "中等",
+      "finishDate": "",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": ""
+    },
+    {
+      "id": "lab\\Vulnhub\\index.md",
+      "path": "lab\\Vulnhub\\index.md",
+      "title": "index",
+      "description": "",
+      "tags": [],
+      "status": "",
+      "difficulty": "",
+      "finishDate": "",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "🎯 Vulnhub 靶场集\r \r > Vulnhub 平台靶场渗透记录\r \r    📊 学习进度\r \r | 指标 | 数值 |\r |------|:----:|\r | 总靶场 | 1 |\r | ✅ 已攻略 | 0 |\r | 🔄 攻略中 | 0 |\r | ⬜ 未开始 | 1 |\r | 完成率 | ░░░░░░░░░░ 0% |\r \r    📝 靶场列表\r \r | 靶场 | 难度 | 状态 |"
+    },
+    {
+      "id": "src\\edusrc\\index.md",
+      "path": "src\\edusrc\\index.md",
+      "title": "index",
+      "description": "",
+      "tags": [],
+      "status": "",
+      "difficulty": "",
+      "finishDate": "",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "🎯 edusrc 目标集\r \r > edusrc 平台漏洞挖掘记录\r \r    📊 挖掘进度\r \r | 指标 | 数值 |\r |------|:----:|\r | 总目标 | 1 |\r | ✅ 已提交 | 0 |\r | 🔄 挖掘中 | 0 |\r | ⬜ 待开始 | 1 |\r | 累计奖金 | 💰 0 元 |\r | 完成率 | ░░░░░░░░░░ 0% |\r \r    🏆 漏洞等级分布\r"
+    },
+    {
+      "id": "src\\edusrc\\山东大学\\exploit.md",
+      "path": "src\\edusrc\\山东大学\\exploit.md",
+      "title": "某大学信息泄露漏洞",
+      "description": "通过目录扫描发现敏感配置文件泄露",
+      "tags": [
+        "信息泄露",
+        "目录扫描",
+        "敏感文件"
+      ],
+      "status": "进行中",
+      "difficulty": "简单",
+      "finishDate": "2026-06-07T00:00:00.000Z",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": ""
+    },
+    {
+      "id": "src\\index.md",
+      "path": "src\\index.md",
+      "title": "index",
+      "description": "",
+      "tags": [],
+      "status": "",
+      "difficulty": "",
+      "finishDate": "",
+      "createdAt": null,
+      "updatedAt": null,
+      "summary": "🎯 SRC 漏洞挖掘\r \r > 各大 SRC 平台真实漏洞挖掘记录 | 目标：年入 10w 💰\r \r    📊 整体战果\r \r | 指标 | 数值 | 目标 |\r |------|:----:|:----:|\r | 覆盖平台 | 2 | - |\r | 总目标数 | 1 | 🎯 50 |\r | ✅ 已提交 | 0 | - |\r | 🔄 挖掘中 | 0 | - |\r | 累计奖金 | 💰 "
+    }
+  ]
+}

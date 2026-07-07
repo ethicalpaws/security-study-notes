@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌉 修桥工程 · 群聊</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app">
+  <header>
+    <div class="title-bar">
+      <div class="title">🌉 修桥工程 · 群聊</div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="connection-status" id="connStatus"><span class="dot connecting"></span> 连接中</span>
+        <span class="room-count" id="roomCount"></span>
+      </div>
+    </div>
+
+    <!-- 房间栏 -->
+    <div class="room-bar-wrap">
+      <div class="room-bar" id="roomBar"></div>
+    </div>
+
+    <!-- 在场战友 -->
+    <div class="agent-bar" id="agentBar"></div>
+  </header>
+
+  <div id="chatArea">
+    <div class="empty-state">
+      <div class="big">🕯️</div>
+      <div class="text">七灯同亮，桥已可见</div>
+      <div class="hint">输入消息开始对话 · @战友名 指定回应者</div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="quick-bar" id="quickBar"></div>
+    <div class="input-row">
+      <input type="text" id="msgInput" placeholder="输入消息，@引灯 @司辰 ..." autofocus />
+      <button id="sendBtn">发送</button>
+    </div>
+  </footer>
+</div>
+
+<!-- 新建房间弹窗 -->
+<div class="modal-overlay" id="createModal">
+  <div class="modal-box">
+    <h3>✚ 新建群聊</h3>
+    <input type="text" id="roomNameInput" placeholder="输入房间名称…" maxlength="30" />
+    <div class="modal-actions">
+      <button class="btn-cancel" id="modalCancel">取消</button>
+      <button class="btn-confirm" id="modalConfirm">创建</button>
+    </div>
+  </div>
+</div>
+
+<!-- 确认删除弹窗 -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="msg" id="confirmMsg"></div>
+    <div class="confirm-actions">
+      <button class="btn-cancel" id="confirmCancel">取消</button>
+      <button class="btn-danger" id="confirmDelete">删除</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

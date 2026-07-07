@@ -1,10 +1,10 @@
 ---
-title: 
-description: 
-tags: 
-status: 
-finish-date: 
-difficulty: 
+title: Fastjson 基础知识
+description: Fastjson 的核心功能（序列化/反序列化）、基本用法示例、@type 特性与安全风险、版本演化历程（1.2.24 至 2.0.x）
+tags: [Fastjson, 序列化, 反序列化, @type, AutoType, 版本演化, Java]
+status: 已完成
+finish-date: 2026-06-29
+difficulty: 简单
 ---
 
 # Fastjson相关基础知识
@@ -68,6 +68,23 @@ System.out.println(parseuser.getName());
 
 - 缺点：因为太“万能”而引入了严重的安全隐患，虽然官方持续在修，但升级和维护需要格外留心。
 
+## 版本演化的核心逻辑
 
+- 1.2.24	无防御，@type 任意类加载
+ 	
+- 1.2.25-1.2.41	引入 AutoType 黑名单 + 白名单机制
 
+- 1.2.42-1.2.46	黑名单加强，加密类名绕过被堵
+
+- 1.2.47	利用 cache 字段两次绕过 checkAutoType()	
+
+- 1.2.48-1.2.67	修复 1.2.47 的 cache 绕过	
+
+- 1.2.68	引入 expectClass、safeMode	
+
+- 1.2.69+	持续加固	
+
+- 1.2.80+	最新绕过（依赖绕过、黑名单扩展）
+
+- 2.0.x     架构变化
 

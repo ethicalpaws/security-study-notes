@@ -209,9 +209,6 @@ nav:
 
   # ==================== 修桥工程 ====================     
   -  修桥工程:
-      - 工程总览: bridge/index.md
-      - 核心:
-        - 核心总览: bridge/core/index.md
       - 《临风行》:
         - 小说总览: bridge/novel/index.md
         - 第一卷: bridge/novel/volume1/index.md

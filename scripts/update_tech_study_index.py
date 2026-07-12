@@ -52,13 +52,13 @@ def read_index_metadata(index_path: str) -> Dict:
         content = f.read()
     return parse_front_matter(content)
 
-def scan_knowledge_stats() -> str:
+def scan_knowledge_stats() -> tuple:
     """
     扫描 knowledge 板块统计
-    返回：知识笔记数量（仅 knowledge 目录下的 .md 文件，不含 index.md）
+    返回：(统计字符串, 链接路径)
     """
     if not os.path.exists(KNOWLEDGE_PATH):
-        return "0篇笔记"
+        return "0篇笔记", "knowledge/"
     
     # 从 knowledge/index.md 的 Front Matter 读取 knowledge_notes
     index_path = os.path.join(KNOWLEDGE_PATH, "index.md")
@@ -73,23 +73,23 @@ def scan_knowledge_stats() -> str:
                 if f.endswith('.md') and f != 'index.md':
                     total_notes += 1
     
-    return f"{total_notes}篇笔记"
+    return f"{total_notes}篇笔记", "knowledge/"
 
-def scan_practice_stats() -> str:
+def scan_practice_stats() -> tuple:
     """扫描 practice 板块统计"""
     if not os.path.exists(PRACTICE_PATH):
-        return "0个目标"
+        return "0个目标", "practice/"
     
     index_path = os.path.join(PRACTICE_PATH, "index.md")
     metadata = read_index_metadata(index_path)
     total_all = metadata.get('total_all', 0)
     
-    return f"{total_all}个目标"
+    return f"{total_all}个目标", "practice/"
 
-def scan_weekly_stats() -> str:
+def scan_weekly_stats() -> tuple:
     """扫描 weekly-check 板块统计"""
     if not os.path.exists(WEEKLY_PATH):
-        return "0周"
+        return "0周", "weekly-check/"
     
     weeks = []
     for week_dir in os.listdir(WEEKLY_PATH):
@@ -99,7 +99,7 @@ def scan_weekly_stats() -> str:
                 weeks.append(week_dir)
     
     if not weeks:
-        return "0周"
+        return "0周", "weekly-check/"
     
     completed = 0
     for week_dir in weeks:
@@ -115,7 +115,7 @@ def scan_weekly_stats() -> str:
         except:
             continue
     
-    return f"{completed}/{len(weeks)}周"
+    return f"{completed}/{len(weeks)}周", "weekly-check/"
 
 def get_total_notes() -> int:
     """
@@ -150,10 +150,10 @@ def generate_tech_study_index(dry_run: bool = False) -> None:
     print(f"路径: {INDEX_PATH}")
     print(f"模式: {'DRY RUN' if dry_run else '实际运行'}\n")
     
-    # 获取统计数据
-    knowledge_stats = scan_knowledge_stats()
-    practice_stats = scan_practice_stats()
-    weekly_stats = scan_weekly_stats()
+    # 获取统计数据（现在返回 (统计字符串, 链接路径)）
+    knowledge_stats, knowledge_link = scan_knowledge_stats()
+    practice_stats, practice_link = scan_practice_stats()
+    weekly_stats, weekly_link = scan_weekly_stats()
     total_notes = get_total_notes()
     total_exp = get_total_exp()
     update_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -164,7 +164,7 @@ def generate_tech_study_index(dry_run: bool = False) -> None:
     print(f"📊 总笔记数: {total_notes}")
     print(f"⭐ 总经验值: {total_exp}")
     
-    # 生成内容
+    # 生成内容 - 板块名称改为链接
     content = f"""# 📚 技术学习
 
 > 网络安全知识体系，从基础到进阶，理论与实践结合。
@@ -173,9 +173,9 @@ def generate_tech_study_index(dry_run: bool = False) -> None:
 
 | 板块 | 说明 | 统计 |
 |------|------|:----:|
-| 📖 知识笔记 | 网络安全知识体系，从基础到进阶 | {knowledge_stats} |
-| 🎯 实战练习 | CTF、CVE、SRC 实战记录 | {practice_stats} |
-| 📋 每周检测 | 每周学习成果自测 | {weekly_stats} |
+| [📖 知识笔记]({knowledge_link}) | 网络安全知识体系，从基础到进阶 | {knowledge_stats} |
+| [🎯 实战练习]({practice_link}) | CTF、CVE、SRC 实战记录 | {practice_stats} |
+| [📋 每周检测]({weekly_link}) | 每周学习成果自测 | {weekly_stats} |
 
 ## 📊 统计
 

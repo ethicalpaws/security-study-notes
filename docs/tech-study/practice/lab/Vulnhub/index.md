@@ -4,7 +4,7 @@ completed: 0
 in_progress: 0
 not_started: 1
 completion_rate: 0
-last_updated: 2026-07-08 03:37:06
+last_updated: 2026-07-12 22:44:19
 ---
 
 # 🎯 Vulnhub 靶场集
@@ -45,4 +45,4 @@ last_updated: 2026-07-08 03:37:06
 - 暂无更新记录
 
 ---
-*最后更新：2026-07-08 03:37:06 | 保持练习，持续进步 💪*
+*最后更新：2026-07-12 22:44:19 | 保持练习，持续进步 💪*

@@ -7,6 +7,7 @@ memory-shell 模块 index.md 自动生成脚本
 
 import os
 import sys
+from datetime import datetime
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, SCRIPT_DIR)
@@ -76,6 +77,22 @@ last_updated: {last_updated}
 *自动更新：{update_time}
 '''
 
+def normalize_date(value):
+    """将日期值统一转换为字符串，用于排序和显示"""
+    if value is None:
+        return ''
+    if isinstance(value, datetime):
+        return value.strftime('%Y-%m-%d')
+    if isinstance(value, str):
+        return value
+    return str(value)
+
+def safe_str(value):
+    """安全地将值转换为字符串，处理 None 类型"""
+    if value is None:
+        return ''
+    return str(value)
+
 def collect_notes() -> list:
     """收集模块目录下所有笔记的元数据"""
     notes_data = []
@@ -95,12 +112,17 @@ def collect_notes() -> list:
         status_cn = metadata.get('status', '未开始')
         finish_date = metadata.get('finish-date', '')
         
+        # 统一转换日期为字符串
+        finish_date_str = normalize_date(finish_date)
+        # 确保 description 不为 None
+        description_str = safe_str(description)
+        
         notes_data.append({
             'file': f,
             'title': title,
-            'description': description,
+            'description': description_str,
             'status_cn': status_cn,
-            'finish_date': finish_date
+            'finish_date': finish_date_str
         })
     
     return notes_data
@@ -187,13 +209,17 @@ last_updated: {update_time}
     else:
         module_status = "⬜"
     
-    # 生成笔记表格
+    # 生成笔记表格（按完成日期倒序，字符串排序安全）
     notes_data.sort(key=lambda x: x.get('finish_date', ''), reverse=True)
     
     notes_table_lines = []
     for n in notes_data:
         status_emoji = get_status_emoji(n['status_cn'])
-        desc_short = n['description'][:50] + "..." if len(n['description']) > 50 else n['description']
+        desc = n.get('description', '')
+        # 确保 desc 是字符串，如果是 None 则设为空字符串
+        if desc is None:
+            desc = ''
+        desc_short = desc[:50] + "..." if len(desc) > 50 else desc
         notes_table_lines.append(f"| [{n['title']}]({n['file']}) | {desc_short} | {status_emoji} |")
     notes_table = "\n".join(notes_table_lines)
     

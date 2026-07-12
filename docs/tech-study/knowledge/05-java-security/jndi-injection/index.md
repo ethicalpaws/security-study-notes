@@ -7,7 +7,7 @@ completed: 2
 in_progress: 0
 not_started: 0
 completion_rate: 100
-last_updated: 2026-07-08 03:36:59
+last_updated: 2026-07-12 22:44:12
 ---
 
 # 🌐 jndi-injection
@@ -51,4 +51,4 @@ last_updated: 2026-07-08 03:36:59
 | [WebLogic CVE-2021-2109](../../../practice/cve\WebLogic-CVE-2021-2109) | WebLogic JNDI注入漏洞，可远程代码执行 |
 
 ---
-*自动更新：2026-07-08 03:36:59
+*自动更新：2026-07-12 22:44:12

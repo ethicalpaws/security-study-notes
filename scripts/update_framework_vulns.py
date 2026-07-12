@@ -62,7 +62,7 @@ last_updated: {last_updated}
 *自动更新：{update_time}
 '''
 
-# 父模块汇总模板
+# 父模块汇总模板 - 子模块名称改为链接
 PARENT_TEMPLATE = '''---
 total_modules: {total_modules}
 total_notes: {total_notes}
@@ -137,7 +137,7 @@ def collect_notes_recursive(module_dir: str) -> list:
                 'title': title,
                 'description': description,
                 'status_cn': status_cn,
-                'finish_date': finish_date_str  # 存储字符串格式
+                'finish_date': finish_date_str
             })
     
     return notes_data
@@ -222,10 +222,12 @@ def update_parent_index(sub_modules_data: list, dry_run: bool = False) -> None:
     completion_rate = int(completed / total_notes * 100) if total_notes > 0 else 0
     progress = progress_bar(completion_rate)
     
-    # 生成子模块表格
+    # 生成子模块表格 - 模块名改为链接
     module_rows = []
     for m in sub_modules_data:
-        module_rows.append(f"| {m['name']} | {m['total_notes']} | {m['completed']} | {m['completion_rate']}% | {m['module_status']} |")
+        # 模块名作为链接，指向子模块的 index.md
+        module_link = f"[{m['name']}]({m['name']}/index.md)"
+        module_rows.append(f"| {module_link} | {m['total_notes']} | {m['completed']} | {m['completion_rate']}% | {m['module_status']} |")
     
     update_time = get_current_time()
     

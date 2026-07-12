@@ -1,7 +1,7 @@
 ---
 title: Fastjson 基础知识
 description: Fastjson 的核心功能（序列化/反序列化）、基本用法示例、@type 特性与安全风险、版本演化历程（1.2.24 至 2.0.x）
-tags: [Fastjson, 序列化, 反序列化, @type, AutoType, 版本演化, Java]
+tags: [Fastjson, 序列化, 反序列化, type, AutoType, 版本演化, Java]
 status: 已完成
 finish-date: 2026-06-29
 difficulty: 简单

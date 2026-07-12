@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Filter型内存马原理、实现方式、注入技巧">
+        <meta name="description" content="Servlet型内存马的核心思想与实现原理、StandardContext 与 Wrapper 组件机制、动态注册流程（获取 Context → 创建 Wrapper → 绑定 URL）、触发执行机制、优势与局限性分析，附 Tomcat 环境实战演示及关键注意事项（名称唯一性、动态路径）">
       
       
         <meta name="author" content="ethicalpaws">
@@ -25,7 +25,7 @@
     
     
       
-        <title>Filter型内存马 - 青春沙盒</title>
+        <title>Servlet型内存马 - 青春沙盒</title>
       
     
     
@@ -86,7 +86,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#filter" class="md-skip">
+        <a href="#servlet" class="md-skip">
           Skip to content
         </a>
       
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Filter型内存马
+              Servlet型内存马
             
           </span>
         </div>
@@ -2772,10 +2772,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#servlet_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        什么是内存马
+        Servlet型内存马核心思想
       
     </span>
   </a>
@@ -2783,10 +2783,71 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#filter_1" class="md-nav__link">
+  <a href="#servlet_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Filter型内存马原理
+        Servlet的核心作用
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#servlet_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        正常Servlet的注册方式
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="正常Servlet的注册方式">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#webxml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        传统web.xml方式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#servlet-30" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        注解方式（Servlet 3.0+）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        动态注册（内存马方式）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#servlet_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Servlet型内存马的的底层原理
       
     </span>
   </a>
@@ -2797,7 +2858,7 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        实现方式
+        优势和局限性
       
     </span>
   </a>
@@ -2808,7 +2869,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        注入技巧
+        一句话总结
       
     </span>
   </a>
@@ -2819,10 +2880,27 @@
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        检测与防御
+        实战
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="实战">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键点
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2846,12 +2924,169 @@
   
 
 
-<h1 id="filter">Filter型内存马<a class="headerlink" href="#filter" title="Permanent link">&para;</a></h1>
-<h2 id="_1">什么是内存马<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<h2 id="filter_1">Filter型内存马原理<a class="headerlink" href="#filter_1" title="Permanent link">&para;</a></h2>
-<h2 id="_2">实现方式<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<h2 id="_3">注入技巧<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
-<h2 id="_4">检测与防御<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h1 id="servlet">Servlet型内存马<a class="headerlink" href="#servlet" title="Permanent link">&para;</a></h1>
+<h2 id="servlet_1">Servlet型内存马核心思想<a class="headerlink" href="#servlet_1" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>在应用运行时，通过反射动态创建一个新的 Servlet，并把它绑定到一个 URL 上，使其成为 Tomcat 中一个正常可访问的接口。</p>
+</blockquote>
+<p>这个 Servlet 自带命令执行功能，访问对应的URL 并传入 cmd 参数即可执行系统命令。注入完成后，JSP 注入器可以删除，但 Servlet 仍然存在于内存中，持续生效。</p>
+<h2 id="servlet_2">Servlet的核心作用<a class="headerlink" href="#servlet_2" title="Permanent link">&para;</a></h2>
+<p>在Java Web中Servlet是用来接收HTTP请求并返回响应的核心组件。</p>
+<p><strong>流程</strong></p>
+<p>访问http://xxx.com/hello
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>1. 请求到达Tomcat
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>2. Tomcat找到绑定/hello的Servlet
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>3. Tomcat调用该Servlet的service方法
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>4. 该Servlet返回响应给用户
+</span></code></pre></div></p>
+<p><em>Servlet型内存马就是动态注册一个Servlet，让Tomcat把它当做正常组件使用</em></p>
+<h2 id="servlet_3">正常Servlet的注册方式<a class="headerlink" href="#servlet_3" title="Permanent link">&para;</a></h2>
+<h3 id="webxml">传统web.xml方式<a class="headerlink" href="#webxml" title="Permanent link">&para;</a></h3>
+<div class="language-xml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">&lt;servlet&gt;</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="nt">&lt;servlet-name&gt;</span>MyServlet<span class="nt">&lt;/servlet-name&gt;</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nt">&lt;servlet-class&gt;</span>com.example.MyServlet<span class="nt">&lt;/servlet-class&gt;</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nt">&lt;/servlet&gt;</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="nt">&lt;servlet-mapping&gt;</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="nt">&lt;servlet-name&gt;</span>MyServlet<span class="nt">&lt;/servlet-name&gt;</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="nt">&lt;url-pattern&gt;</span>/hello<span class="nt">&lt;/url-pattern&gt;</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="nt">&lt;/servlet-mapping&gt;</span>
+</span></code></pre></div>
+<h3 id="servlet-30">注解方式（Servlet 3.0+）<a class="headerlink" href="#servlet-30" title="Permanent link">&para;</a></h3>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nd">@WebServlet</span><span class="p">(</span><span class="s">&quot;/hello&quot;</span><span class="p">)</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyServlet</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">HttpServlet</span><span class="p">{</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="c1">//...</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="_1">动态注册（内存马方式）<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">Wrapper</span><span class="w"> </span><span class="n">wrapper</span><span class="w"> </span><span class="o">=</span><span class="n">context</span><span class="p">.</span><span class="na">createWrapper</span><span class="p">();</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">wrapper</span><span class="p">.</span><span class="na">setServlet</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">MyServlet</span><span class="p">());</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">context</span><span class="p">.</span><span class="na">addChild</span><span class="p">(</span><span class="n">wrapper</span><span class="p">);</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">context</span><span class="p">.</span><span class="na">addServletMappingDecoded</span><span class="p">(</span><span class="s">&quot;/hello&quot;</span><span class="p">,</span><span class="s">&quot;MyServlet&quot;</span><span class="p">);</span>
+</span></code></pre></div>
+<h2 id="servlet_4">Servlet型内存马的的底层原理<a class="headerlink" href="#servlet_4" title="Permanent link">&para;</a></h2>
+<p><strong>StandardContext</strong></p>
+<p>和Filter型一样，StandardContext是管理Servlet的核心对象</p>
+<p><strong>Wrapper</strong></p>
+<p>Wrapper是Tomcat中管理单个Servlet的容器对象
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>StandardContext（应用上下文）
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    ├── children（Map&lt;String, Container&gt;）
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    │   └── Wrapper（Servlet 容器）
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    │       ├── name: &quot;MyServlet&quot;
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    │       ├── servletClass: &quot;com.example.MyServlet&quot;
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    │       └── servlet: MyServlet 实例
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>    └── servletMappings（Map&lt;String, String&gt;）
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>        └── &quot;/hello&quot; → &quot;MyServlet&quot;
+</span></code></pre></div></p>
+<p><strong>注册步骤</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>1. 获取StandardContext【反射获取】
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>2. 创建恶意Servlet组件
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>3. 创建Wrapper组件
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>4. 设置Wrapper属性
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>5. 将Wrapper添加到StandardContext中
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>6. 绑定URL
+</span></code></pre></div></p>
+<p><strong>触发流程</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>用户访问 /backdoor?cmd=whoami
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>    ↓
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>Tomcat 接收请求
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    ↓
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>查找 servletMappings → &quot;/backdoor&quot; → &quot;EvilServlet&quot;
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    ↓
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>从 children 中获取 Wrapper（EvilServlet）
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>    ↓
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>调用 EvilServlet.service()
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>    ↓
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>检测到 cmd 参数
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>    ↓
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>Runtime.exec() 执行命令
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>    ↓
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>返回结果给用户
+</span></code></pre></div></p>
+<h2 id="_2">优势和局限性<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p><strong>优势</strong></p>
+<ul>
+<li>
+<p>注册逻辑简单，代码量少</p>
+</li>
+<li>
+<p>回显自然，不存在Listener型无回显的问题</p>
+</li>
+<li>
+<p>正常业务中大量使用Servlet，不易察觉</p>
+</li>
+</ul>
+<p><strong>局限性</strong></p>
+<ul>
+<li>
+<p>URL固定容易被审计发现</p>
+</li>
+<li>
+<p>访问日志中会留下路径＋参数痕迹</p>
+</li>
+<li>
+<p>相比Listener型，隐蔽性低</p>
+</li>
+</ul>
+<h2 id="_3">一句话总结<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>Servlet 型内存马的本质是：利用反射获取 Tomcat 的 StandardContext，动态创建一个 Wrapper 包装恶意 Servlet 并绑定到指定 URL，使其成为 Tomcat 中一个正常的、可访问的接口，实现无文件后门。</p>
+<h2 id="_4">实战<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p><strong>环境</strong>:docker 搭建Tomcat8.5容器</p>
+<p><img alt="" src="2026-07-12-13-39-03.png" /></p>
+<p><strong>PoC</strong></p>
+<p><a href="../../../../code-attachment/memory-shell-code/minidemo/Servlet.jsp">完整注入器代码</a></p>
+<p><strong>注入</strong></p>
+<p><img alt="" src="2026-07-12-14-20-37.png" />
+<img alt="" src="2026-07-12-14-38-52.png" /></p>
+<p><strong>访问</strong></p>
+<p><img alt="" src="2026-07-12-14-39-12.png" /></p>
+<p><strong>验证不落盘</strong></p>
+<p><img alt="" src="2026-07-12-14-39-48.png" />
+<img alt="" src="2026-07-12-14-40-19.png" /></p>
+<h3 id="_5">关键点<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p>名称必须唯一
+   Tomcat 的 StandardContext 用 children Map 存储所有 Servlet，Key 就是 Servlet 名称。如果重复添加同名 Servlet，就会抛出 IllegalArgumentException: Child name [xxx] is not unique 
+   <img alt="" src="2026-07-12-14-42-22.png" /></p>
+</li>
+<li>
+<p>如何避免冲突</p>
+</li>
+<li>
+<p>System.currentTimeMillis() 用时间戳生成唯一名称</p>
+</li>
+<li>
+<p>UUID.randomUUID()  生成随机 UUID</p>
+</li>
+<li>
+<p>检查是否已存在   用 sct.findChild(name) 检查后再添加</p>
+</li>
+<li>
+<p>先删除再添加 用 sct.removeChild(wrapper) 删除旧的 </p>
+</li>
+<li>
+<p>实战中要用动态路径</p>
+<ul>
+<li>
+<p>每次注入生成不同的路径，增加检测难度</p>
+</li>
+<li>
+<p>即使被管理员发现一个路径，其他路径仍然隐藏</p>
+</li>
+<li>
+<p>可以和正常业务路径混在一起，难以区分</p>
+</li>
+</ul>
+</li>
+</ol>
 
 
 
@@ -2874,7 +3109,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="July 7, 2026 22:57:41 UTC"><span class="timeago" datetime="2026-07-07T22:57:41+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="July 7, 2026 22:57:41 UTC">2026-07-07</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="July 12, 2026 14:53:08 UTC"><span class="timeago" datetime="2026-07-12T14:53:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="July 12, 2026 14:53:08 UTC">2026-07-12</span>
   </span>
 
     
@@ -2884,7 +3119,7 @@
     <span class="md-icon" title="Created">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="July 7, 2026 22:57:41 UTC"><span class="timeago" datetime="2026-07-07T22:57:41+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="July 7, 2026 22:57:41 UTC">2026-07-07</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="July 12, 2026 14:53:08 UTC"><span class="timeago" datetime="2026-07-12T14:53:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="July 12, 2026 14:53:08 UTC">2026-07-12</span>
   </span>
 
     

@@ -9,3 +9,7 @@
 
 `ech $env:变量名`
 ![](powershell/2026-07-01-17-00-02.png)
+
+
+
+本地Local

@@ -1,18 +1,18 @@
 ---
-module_name: evasion
-description: evasion 学习笔记
+module_name: 👻 免杀与绕过
+description: 👻 免杀与绕过 学习笔记
 status: ⬜
 total_notes: 1
 completed: 0
 in_progress: 0
 not_started: 1
 completion_rate: 0
-last_updated: 2026-07-12 22:44:15
+last_updated: 2026-07-21 00:24:32
 ---
 
-# evasion
+# 👻 免杀与绕过
 
-> evasion 学习笔记
+> 👻 免杀与绕过 学习笔记
 
 ## 模块状态：⬜
 
@@ -33,4 +33,4 @@ last_updated: 2026-07-12 22:44:15
 | [evasion](evasion.md) |  | ⬜ |
 
 ---
-*自动更新：2026-07-12 22:44:15
+*自动更新：2026-07-21 00:24:32

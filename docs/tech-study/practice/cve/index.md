@@ -1,10 +1,10 @@
 ---
-total_cves: 7
+total_cves: 8
 analyzed: 4
 in_progress: 0
-not_started: 3
-completion_rate: 57
-last_updated: 2026-07-12 22:44:22
+not_started: 4
+completion_rate: 50
+last_updated: 2026-07-21 00:24:38
 ---
 
 # 🐞 CVE 漏洞分析
@@ -15,11 +15,11 @@ last_updated: 2026-07-12 22:44:22
 
 | 指标 | 数值 |
 |------|:----:|
-| CVE总数 | 7 |
+| CVE总数 | 8 |
 | ✅ 已分析 | 4 |
 | 🔄 分析中 | 0 |
-| ⬜ 未开始 | 3 |
-| 完成率 | █████░░░░░ 57% |
+| ⬜ 未开始 | 4 |
+| 完成率 | █████░░░░░ 50% |
 
 ## 📋 漏洞列表
 
@@ -30,6 +30,7 @@ last_updated: 2026-07-12 22:44:22
 | WebLogic-CVE-2017-10271 | WebLogic XMLDecoder反序列化漏洞，可远程代码执行 | 中危 | 中等 | ✅ |
 | CVE-2021-2109 | WebLogic JNDI注入漏洞，可远程代码执行 | 高危 | 困难 | ✅ |
 | Fastjson-CVE-2017-18349 | None | 中危 | None | ⬜ |
+| Spring4Shell-CVE-2022-22965 | None | 中危 | None | ⬜ |
 | SpringBootActuator-CVE-2026-22731 |  | 中危 | 中等 | ⬜ |
 | WebLogic-CVE-2023-21839 | None | 中危 | None | ⬜ |
 
@@ -37,7 +38,7 @@ last_updated: 2026-07-12 22:44:22
 
 | 漏洞类型 | 数量 | 占比 |
 |---------|:----:|:----:|
-| 其他 | 7 | 100% |
+| 其他 | 8 | 100% |
 
 ## 💡 学习建议
 
@@ -61,6 +62,7 @@ last_updated: 2026-07-12 22:44:22
 | WebLogic-CVE-2017-10271 | [WebLogic-CVE-2017-10271/](WebLogic-CVE-2017-10271/) |
 | CVE-2021-2109 | [WebLogic-CVE-2021-2109/](WebLogic-CVE-2021-2109/) |
 | Fastjson-CVE-2017-18349 | [Fastjson-CVE-2017-18349/](Fastjson-CVE-2017-18349/) |
+| Spring4Shell-CVE-2022-22965 | [Spring4Shell-CVE-2022-22965/](Spring4Shell-CVE-2022-22965/) |
 | SpringBootActuator-CVE-2026-22731 | [SpringBootActuator-CVE-2026-22731/](SpringBootActuator-CVE-2026-22731/) |
 | WebLogic-CVE-2023-21839 | [WebLogic-CVE-2023-21839/](WebLogic-CVE-2023-21839/) |
 
@@ -69,4 +71,4 @@ last_updated: 2026-07-12 22:44:22
 - 暂无更新记录
 
 ---
-*最后更新：2026-07-12 22:44:22 | 持续学习，深度思考 💪*
+*最后更新：2026-07-21 00:24:38 | 持续学习，深度思考 💪*

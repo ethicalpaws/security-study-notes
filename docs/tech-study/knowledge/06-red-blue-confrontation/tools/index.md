@@ -1,18 +1,18 @@
 ---
-module_name: tools
-description: tools 学习笔记
+module_name: 🔧 工具使用
+description: 🔧 工具使用 学习笔记
 status: ⬜
 total_notes: 10
 completed: 0
 in_progress: 0
 not_started: 10
 completion_rate: 0
-last_updated: 2026-07-12 22:44:15
+last_updated: 2026-07-21 00:24:32
 ---
 
-# tools
+# 🔧 工具使用
 
-> tools 学习笔记
+> 🔧 工具使用 学习笔记
 
 ## 模块状态：⬜
 
@@ -30,16 +30,16 @@ last_updated: 2026-07-12 22:44:15
 
 | 笔记 | 描述 | 状态 |
 |------|------|:----:|
-| [impacket](credential-attack\impacket.md) |  | ⬜ |
-| [mimikatz](credential-attack\mimikatz.md) |  | ⬜ |
-| [rubeus](credential-attack\rubeus.md) |  | ⬜ |
-| [ad-explorer](information-collection\ad-explorer.md) |  | ⬜ |
-| [adfind](information-collection\adfind.md) |  | ⬜ |
-| [bloodhound](information-collection\bloodhound.md) |  | ⬜ |
-| [powerview](information-collection\powerview.md) |  | ⬜ |
-| [crackmapexec](lateral-movement\crackmapexec.md) |  | ⬜ |
-| [psexec-wmi](lateral-movement\psexec-wmi.md) |  | ⬜ |
-| [golden-silver-ticket](persistence\golden-silver-ticket.md) |  | ⬜ |
+| [impacket](credential-attack/impacket.md) |  | ⬜ |
+| [mimikatz](credential-attack/mimikatz.md) |  | ⬜ |
+| [rubeus](credential-attack/rubeus.md) |  | ⬜ |
+| [ad-explorer](information-collection/ad-explorer.md) |  | ⬜ |
+| [adfind](information-collection/adfind.md) |  | ⬜ |
+| [bloodhound](information-collection/bloodhound.md) |  | ⬜ |
+| [powerview](information-collection/powerview.md) |  | ⬜ |
+| [crackmapexec](lateral-movement/crackmapexec.md) |  | ⬜ |
+| [psexec-wmi](lateral-movement/psexec-wmi.md) |  | ⬜ |
+| [golden-silver-ticket](persistence/golden-silver-ticket.md) |  | ⬜ |
 
 ---
-*自动更新：2026-07-12 22:44:15
+*自动更新：2026-07-21 00:24:32

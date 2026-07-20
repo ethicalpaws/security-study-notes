@@ -1,11 +1,11 @@
 ---
 total_modules: 6
-total_notes: 28
+total_notes: 29
 completed: 23
 in_progress: 0
-not_started: 2
-completion_rate: 82
-last_updated: 2026-07-12 22:44:16
+not_started: 0
+completion_rate: 79
+last_updated: 2026-07-21 00:24:32
 ---
 
 # ☕ Java安全
@@ -23,18 +23,18 @@ last_updated: 2026-07-12 22:44:16
 | [Java Deserialization](java-deserialization/) | 10 | 10 | 100% | ♻️ |
 | [Java Web](Java-Web/) | 0 | 0 | 0% | ⬜ |
 | [Jndi Injection](jndi-injection/) | 2 | 2 | 100% | ♻️ |
-| [Memory Shell](memory-shell/) | 9 | 4 | 44% | 🔄 |
+| [Memory Shell](memory-shell/) | 10 | 4 | 40% | 🔄 |
 
 ## 📊 学习进度
 
 | 指标 | 数值 |
 |------|:----:|
 | 总模块数 | 6 |
-| 总笔记数 | 28 |
+| 总笔记数 | 29 |
 | ✅ 已完成笔记 | 23 |
 | 🔄 进行中 | 0 |
-| ⬜ 未开始 | 2 |
-| 整体完成率 | ████████░░ 82% |
+| ⬜ 未开始 | 0 |
+| 整体完成率 | ███████░░░ 79% |
 
 ## 🎯 学习路线（建议顺序）
 
@@ -63,4 +63,4 @@ last_updated: 2026-07-12 22:44:16
 - [ ] 完成 10 个模块 → 🏆 Java安全精通
 
 ---
-*最后更新：2026-07-12 22:44:16 | 状态自动同步*
+*最后更新：2026-07-21 00:24:32 | 状态自动同步*

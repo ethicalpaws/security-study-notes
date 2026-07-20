@@ -1,18 +1,18 @@
 ---
-module_name: lateral-movement
-description: lateral-movement 学习笔记
+module_name: 🔄 横向移动
+description: 🔄 横向移动 学习笔记
 status: ⬜
 total_notes: 1
 completed: 0
 in_progress: 0
 not_started: 1
 completion_rate: 0
-last_updated: 2026-07-12 22:44:15
+last_updated: 2026-07-21 00:24:32
 ---
 
-# lateral-movement
+# 🔄 横向移动
 
-> lateral-movement 学习笔记
+> 🔄 横向移动 学习笔记
 
 ## 模块状态：⬜
 
@@ -33,4 +33,4 @@ last_updated: 2026-07-12 22:44:15
 | [lateral-movement](lateral-movement.md) |  | ⬜ |
 
 ---
-*自动更新：2026-07-12 22:44:15
+*自动更新：2026-07-21 00:24:32

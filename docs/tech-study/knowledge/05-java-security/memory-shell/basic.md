@@ -88,6 +88,98 @@ difficulty: 中等
                     └── 寄生位置: JVM 运行时数据区 (独立/劫持线程栈)
 ```
 
+## JVM型内存马原理（Instrumentation + VirtualMachine）
+
+### 核心概念
+>JVM内存马依赖的两个核心API
+
+- Instrumentation	java.lang.instrument	修改/重新定义已加载类的字节码
+
+- VirtualMachine	com.sun.tools.attach	动态挂载 Agent Jar 到目标 JVM 进程
+
+**关系图**
+```
+攻击者进程
+    ↓
+VirtualMachine.attach(pid)  →  连接到目标 JVM
+    ↓
+VirtualMachine.loadAgent(agent.jar)  →  将 Agent Jar 推送到目标 JVM
+    ↓
+目标 JVM 执行 Agent 中的 agentmain() 方法
+    ↓
+Agent 通过 Instrumentation API 修改字节码
+    ↓
+目标类被重新定义 → 后门生效
+```
+
+### 关键类详解
+**instrumentation**
+```java
+public interface Instrumentation {
+    // 添加字节码转换器
+    void addTransformer(ClassFileTransformer transformer, boolean canRetransform);
+    
+    // 重新定义已加载的类
+    void retransformClasses(Class<?>... classes) throws UnmodifiableClassException;
+    
+    // 获取所有已加载的类
+    Class<?>[] getAllLoadedClasses();
+}
+```
+
+**ClassFileTransformer**
+```
+public interface ClassFileTransformer {
+    byte[] transform(
+        ClassLoader loader,
+        String className,
+        Class<?> classBeingRedefined,
+        ProtectionDomain protectionDomain,
+        byte[] classfileBuffer
+    );
+}
+```
+
+**VirtualMachine**
+
+```java
+public abstract class VirtualMachine {
+    // 通过 PID 连接到目标 JVM
+    public static VirtualMachine attach(String pid) throws AttachNotSupportedException, IOException;
+    
+    // 加载 Agent Jar
+    public void loadAgent(String agentPath) throws AgentLoadException, AgentInitializationException, IOException;
+    
+    // 断开连接
+    public void detach() throws IOException;
+}
+
+```
+
+### JVM型与其他类型的组合
+>Thread 型往往不单独使用，而是配合其他类型的后门，形成完整控制链：
+
+```text
+组合方案：
+
+1. Filter/Controller 型 → 作为“前台入口”，接收命令
+2. Thread 型 → 作为“后台执行器”，执行长时间任务
+3. Agent 型 → 作为“底层持久化”，保持后门存活
+```
+示例流程：
+
+```text
+攻击者访问 /backdoor?cmd=whoami
+    ↓
+Filter 拦截请求，将命令放入共享队列
+    ↓
+后台线程从队列中取出命令并执行
+    ↓
+执行结果存入共享变量
+    ↓
+Filter 读取共享变量并回显给攻击者
+```
+
 ## 以Filter型为例编写内存马demo
 ### 关键步骤
 ```

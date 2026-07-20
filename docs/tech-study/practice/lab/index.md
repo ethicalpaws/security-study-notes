@@ -5,7 +5,7 @@ completed_machines: 0
 in_progress_machines: 0
 not_started_machines: 2
 completion_rate: 0
-last_updated: 2026-07-12 22:44:23
+last_updated: 2026-07-21 00:24:39
 ---
 
 # 🎯 靶场训练场
@@ -52,8 +52,8 @@ last_updated: 2026-07-12 22:44:23
 
 ## 📝 近期更新
 
-- **TRYMEHACK** (2026-07-12) : 0/1 靶场已完成
-- **VULNHUB** (2026-07-12) : 0/1 靶场已完成
+- **TRYMEHACK** (2026-07-21) : 0/1 靶场已完成
+- **VULNHUB** (2026-07-21) : 0/1 靶场已完成
 
 ---
-*最后更新：2026-07-12 22:44:23 | 保持练习，持续进步 💪*
+*最后更新：2026-07-21 00:24:39 | 保持练习，持续进步 💪*

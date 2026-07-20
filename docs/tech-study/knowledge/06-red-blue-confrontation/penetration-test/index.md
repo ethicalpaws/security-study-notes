@@ -1,18 +1,18 @@
 ---
-module_name: penetration-test
-description: penetration-test 学习笔记
+module_name: 🔍 渗透测试
+description: 🔍 渗透测试 学习笔记
 status: ⬜
 total_notes: 1
 completed: 0
 in_progress: 0
 not_started: 1
 completion_rate: 0
-last_updated: 2026-07-12 22:44:15
+last_updated: 2026-07-21 00:24:32
 ---
 
-# penetration-test
+# 🔍 渗透测试
 
-> penetration-test 学习笔记
+> 🔍 渗透测试 学习笔记
 
 ## 模块状态：⬜
 
@@ -33,4 +33,4 @@ last_updated: 2026-07-12 22:44:15
 | [penetration-test](penetration-test.md) |  | ⬜ |
 
 ---
-*自动更新：2026-07-12 22:44:15
+*自动更新：2026-07-21 00:24:32

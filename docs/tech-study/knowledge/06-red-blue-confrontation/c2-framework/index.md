@@ -1,18 +1,18 @@
 ---
-module_name: c2-framework
-description: c2-framework 学习笔记
+module_name: 🎯 C2框架
+description: 🎯 C2框架 学习笔记
 status: ⬜
 total_notes: 1
 completed: 0
 in_progress: 0
 not_started: 1
 completion_rate: 0
-last_updated: 2026-07-12 22:44:15
+last_updated: 2026-07-21 00:24:32
 ---
 
-# c2-framework
+# 🎯 C2框架
 
-> c2-framework 学习笔记
+> 🎯 C2框架 学习笔记
 
 ## 模块状态：⬜
 
@@ -33,4 +33,4 @@ last_updated: 2026-07-12 22:44:15
 | [c2-framework](c2-framework.md) |  | ⬜ |
 
 ---
-*自动更新：2026-07-12 22:44:15
+*自动更新：2026-07-21 00:24:32
